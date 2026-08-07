@@ -408,7 +408,47 @@
     color:var(--ink);font-size:16px;outline:none;font-family:inherit;}
   .cmt-row button{flex:none;border:0;background:var(--surface-3);color:var(--ink);border-radius:10px;
     padding:0 13px;font-size:12.5px;font-weight:700;}
-  @media (max-width:380px){ .composer,.post{margin-left:16px;margin-right:16px;} }
+  @media (max-width:380px){ .composer,.post,.cwrap{margin-left:16px;margin-right:16px;} }
+  .cwrap{margin:10px 20px 4px;}
+  .ctypes{display:flex;gap:6px;flex-wrap:wrap;}
+  .tchip{border:1px solid var(--hair);background:var(--surface);color:var(--ink-2);padding:6px 11px;
+    border-radius:16px;font-size:11.5px;font-weight:600;transition:.15s;}
+  .tchip.on{background:var(--accent-soft);color:var(--accent);border-color:transparent;}
+  .tchip.pick{margin-left:auto;}
+  .tbdg{font-size:9px;font-weight:800;letter-spacing:.3px;padding:2.5px 6px;border-radius:5px;
+    background:var(--surface-2);color:var(--ink-soft);}
+  .tbdg.ask{background:var(--accent-soft);color:var(--accent);}
+  .tbdg.rev{background:color-mix(in srgb,#E3B15C 16%,transparent);color:#E3B15C;}
+  .tbdg.vot{background:color-mix(in srgb,#4b79e8 15%,transparent);color:#7fa3e8;}
+  .tbdg.hot{background:var(--accent);color:#fff;}
+  .pact.reco{color:var(--accent);font-weight:700;}
+  .vote{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+  .vopt{position:relative;overflow:hidden;border:1px solid var(--hair);background:var(--surface-2);
+    border-radius:11px;padding:11px 13px;display:flex;align-items:center;text-align:left;font-size:13px;font-weight:600;color:var(--ink);}
+  .vopt i{position:absolute;left:0;top:0;bottom:0;background:var(--accent-soft);transition:width .5s cubic-bezier(.25,.8,.25,1);}
+  .vopt span{position:relative;}
+  .vopt b{position:relative;margin-left:auto;color:var(--accent);font-variant-numeric:tabular-nums;}
+  .vopt.on{border-color:var(--accent);}
+  .vtotal{font-size:10.5px;color:var(--ink-soft);text-align:right;}
+  .cchip{display:inline-flex;margin-left:6px;background:var(--accent-soft);color:var(--accent);border:0;
+    border-radius:7px;padding:2.5px 7px;font-size:10.5px;font-weight:700;vertical-align:1px;}
+  .cattach{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2);background:var(--accent-soft);
+    border-radius:9px;padding:7px 11px;}
+  .cattach b{color:var(--accent);}
+  .cattach button{border:0;background:none;color:var(--ink-soft);margin-left:auto;font-size:11px;padding:2px 4px;}
+  .cpk{flex:none;border:1px solid var(--hair);background:var(--surface);color:var(--accent);border-radius:10px;
+    padding:0 11px;font-size:14px;font-weight:800;}
+  .pklist{display:flex;flex-direction:column;gap:7px;padding:0 20px 30px;}
+  .pkitem{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--hair);
+    border-radius:12px;padding:12px 14px;font-size:13.5px;font-weight:600;text-align:left;color:var(--ink);}
+  .pkitem .pkc{font-size:10px;color:var(--ink-soft);background:var(--surface-2);border-radius:5px;padding:2px 6px;flex:none;}
+  .pkitem b{margin-left:auto;color:#E3B15C;font-size:11px;font-weight:700;}
+  .mini-post{display:flex;align-items:center;gap:9px;margin:0 20px 8px;background:var(--surface);
+    border:1px solid var(--hair);border-radius:13px;padding:11px 13px;text-align:left;width:calc(100% - 40px);}
+  .mini-post .pav{width:28px;height:28px;font-size:12px;flex:none;}
+  .mini-post .mtxt{flex:1;min-width:0;font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .mini-post .mlk{flex:none;font-size:11px;color:var(--accent);font-weight:700;}
+  @media (max-width:380px){ .mini-post{margin-left:16px;margin-right:16px;width:calc(100% - 32px);} }
 
   /* ===== footer ===== */
   .foot{margin:28px 20px 8px;padding:18px 0 8px;border-top:1px solid var(--hair);color:var(--ink-soft);font-size:11px;line-height:1.8;}
@@ -919,6 +959,10 @@ function renderHome(){
       </div>
       <div class="reco-go">${state.profile?'재진단':'시작'} →</div>
     </button>
+    <div class="sec-h"><h2>지금 수다방</h2><span class="more" data-goto="comm">전체 →</span></div>
+    ${COMM.slice().sort((a,b)=>b.likes-a.likes).slice(0,3).map(p=>`<button class="mini-post" data-goto="comm">
+      <div class="pav">${p.who[0]}</div><span class="mtxt"><b style="color:var(--ink)">${p.who}</b> · ${p.text.split("\n")[0]}</span><span class="mlk">♥ ${p.likes}</span>
+    </button>`).join("")}
     ${shelves}
     <div class="hero" style="background-color:#170a10;background-image:linear-gradient(155deg,rgba(28,10,18,.68),rgba(13,8,10,.94)),url('${top.photo}');background-size:cover;background-position:center;">
       <div class="eyebrow">오늘의 한 잔</div>
@@ -1017,58 +1061,152 @@ function renderCure(){
     <div class="block" style="margin-top:16px"><p class="desc" style="font-size:12px;color:var(--ink-soft)">※ 숙취 해소 제품의 효과는 개인차가 있으며, 가장 확실한 해장은 적정 음주와 충분한 수분·휴식입니다.</p></div>`;
 }
 
-/* ============ 커뮤니티 ============ */
-const COMM = [
-  { id:1, who:"위스키입문", time:"1시간 전", text:"글렌피딕 12년 첫 개봉했는데 생각보다 달달하네요. 다음엔 하이볼로도 마셔볼 예정", drink:"글렌피딕 12년", likes:12, liked:false,
-    cmts:[["몰트덕후","온더락으로도 한번 드셔보세요. 향이 확 열립니다"],["하이볼장인","탄산수 1:3 비율 추천!"]] },
-  { id:2, who:"혼술러", time:"3시간 전", text:"퇴근하고 테라 한 캔. 이 맛에 삽니다", drink:"테라", likes:8, liked:false,
-    cmts:[["맥주광","오늘같은 날씨엔 라거죠"]] },
-  { id:3, who:"막걸리사랑", time:"5시간 전", text:"비 오는 날 파전에 막걸리 조합은 진짜 실패가 없다... 국룰 인정?", drink:"막걸리 생", likes:21, liked:false,
-    cmts:[["전통주덕후","인정합니다. 여기에 김치전 추가요"],["비오는날","지금 바로 시켰습니다"]] },
-  { id:4, who:"해장전문가", time:"어제", text:"콩나물국밥 vs 황태해장국\n여러분의 해장 원픽은?", drink:null, likes:15, liked:false,
-    cmts:[["북엇국파","전 북엇국이요. 속 쓰릴 땐 담백한 게 최고"],["전주사람","무조건 콩나물국밥에 수란"]] },
-  { id:5, who:"데킬라챌린저", time:"어제", text:"패트론 실버 처음 마셔봤는데 데킬라 편견이 깨졌어요. 이렇게 부드러울 일? 소금 라임 없이도 갑니다", drink:"패트론 실버", likes:17, liked:false, cmts:[] },
-  { id:6, who:"첨가물헌터", time:"2일 전", text:"캔하이볼 성분표 보고 충격받음... 아스파탐에 합성착향료까지. 앞으로는 위스키+탄산수로 직접 만들어 마시려구요", drink:"짐빔 하이볼", likes:33, liked:false,
-    cmts:[["클린라벨","저도 성분 보고 갈아탔어요"],["가쿠빈러버","가쿠빈 하이볼 만들면 세상 깔끔합니다"]] },
+/* ============ 커뮤니티 · 수다방 2.0 ============ */
+const CHANNELS=["전체","추천구함","리뷰","혼술","해장","투표"];
+const COMM=[
+ {id:1,type:"ask",chan:"추천구함",who:"막내사원",time:"12분 전",text:"다음주 팀 회식인데 부장님이 위스키 좋아하셔서... 5만원대에서 실패 없는 걸로 추천 부탁드려요 🙏",drink:null,likes:18,liked:false,
+  cmts:[["몰트덕후","조니워커 블랙 가세요. 회식용 정답입니다","조니워커 블랙"],["가성비장인","시바스 12도 무난해요. 부드러워서 다들 좋아함","시바스 리갈 12년"],["버번파","양식이면 버팔로 트레이스도 좋아요","버팔로 트레이스"]]},
+ {id:2,type:"review",chan:"리뷰",who:"셰리밤",time:"1시간 전",text:"맥캘란 12 셰리오크 드디어 개봉.\n건포도, 다크초콜릿, 끝에 오렌지필. 이 가격 하는 이유가 있네요. 니트로만 3잔째",drink:"맥캘란 12년 셰리오크",likes:44,liked:false,
+  cmts:[["위스키입문","입문자가 마셔도 괜찮을까요?"],["셰리밤","달달해서 오히려 입문에 최고예요"]]},
+ {id:3,type:"vote",chan:"투표",who:"치킨집사장",time:"2시간 전",text:"영원한 논쟁. 치킨엔 뭐다?",drink:null,likes:36,liked:false,
+  vote:{a:"테라",b:"아사히",ca:132,cb:98,voted:null},cmts:[["국산파","치킨엔 무조건 국산 라거지"],["드라이파","아사히 드라이함이 기름을 씻어줌"]]},
+ {id:4,type:"ask",chan:"추천구함",who:"홈파티준비",time:"3시간 전",text:"여자친구랑 홈파티 하는데 술 잘 못 마셔요. 달달하고 도수 낮은 와인 추천해주세요!",drink:null,likes:12,liked:false,
+  cmts:[["스위트러버","빌라엠 모스카토 정답. 5도라 주스같이 넘어가요","빌라엠 모스카토"],["로제파","베린저 화이트진판델도 새콤달콤 좋아요","베린저 화이트진판델"]]},
+ {id:5,type:"talk",chan:"혼술",who:"퇴근5분전",time:"4시간 전",text:"오늘은 가쿠빈 하이볼 셀프 제조. 레몬 슬라이스까지 올리면 이자카야 부럽지 않다",drink:"산토리 가쿠빈",likes:23,liked:false,
+  cmts:[["하이볼장인","탄산수 1:3에 얼음 꽉 채우는 게 국룰"]]},
+ {id:6,type:"talk",chan:"해장",who:"어제의나",time:"5시간 전",text:"어제 소맥 과음... 컨디션 vs 상쾌환 뭐가 더 잘 들어요? 지금이라도 사러 감",drink:null,likes:9,liked:false,
+  cmts:[["약사아님","마시기 전엔 컨디션, 마신 후엔 상쾌환이 국룰이래요"],["헛개인간","전 그냥 헛개차 2리터가 최고던데"]]},
+ {id:7,type:"review",chan:"리뷰",who:"피트괴물",time:"7시간 전",text:"아드벡 10 첫 잔. 이건... 병원 소독약인가 위스키인가. 근데 세 잔째부터 이해되기 시작함. 피트 입문 주의보",drink:"아드벡 10년",likes:31,liked:false,
+  cmts:[["피트러버","축하합니다 이제 못 돌아갑니다"],["논피트파","전 아직도 이해 못 함..."]]},
+ {id:8,type:"ask",chan:"추천구함",who:"효자되기",time:"어제",text:"아버지 생신 선물로 10만원대 위스키 찾습니다. 평소 발렌타인 드세요",drink:null,likes:15,liked:false,
+  cmts:[["선물장인","발렌타인 17이 정답이에요. 아는 맛의 상위호환","발렌타인 17년"],["셰리밤","취향 넓혀드리려면 맥캘란 12도 좋아요","맥캘란 12년 셰리오크"]]},
+ {id:9,type:"vote",chan:"투표",who:"위스키토론",time:"어제",text:"위스키 첫 잔, 당신의 선택은?",drink:null,likes:28,liked:false,
+  vote:{a:"니트(그대로)",b:"하이볼",ca:87,cb:113,voted:null},cmts:[["원액파","일단 니트로 향부터 봐야죠"],["시원파","여름엔 하이볼이 진리"]]},
+ {id:10,type:"talk",chan:"혼술",who:"첨가물헌터",time:"어제",text:"캔하이볼 성분표 보고 충격. 아스파탐+합성착향료... 홍술 성분 보기 기능으로 다 비교해봄. 그냥 위스키+탄산수로 만들어 먹는 게 답",drink:"짐빔 하이볼",likes:39,liked:false,
+  cmts:[["클린라벨","저도 성분 보고 갈아탔어요"],["가쿠빈러버","셀프 하이볼이 더 싸고 깔끔합니다","산토리 가쿠빈"]]},
+ {id:11,type:"ask",chan:"추천구함",who:"소맥마스터",time:"2일 전",text:"소맥 황금비율 공유 좀. 전 소주3:맥주7인데 더 좋은 비율 있나요?",drink:null,likes:21,liked:false,
+  cmts:[["과학적음주","잔 기준 소주 45ml + 맥주 155ml가 논문(?)상 최적입니다"],["말아왕","비율보다 맥주가 얼마나 차가운지가 90%예요"]]},
+ {id:12,type:"review",chan:"리뷰",who:"전통주탐험",time:"2일 전",text:"화요 25 첫 경험. 소주라고 무시했는데 완전 다른 세계네요. 쌀 단맛이 은은하고 다음날 머리가 맑음",drink:"화요 25",likes:26,liked:false,
+  cmts:[["증류식파","이제 안동소주 45도 가보세요","안동소주 45"]]},
+ {id:13,type:"talk",chan:"혼술",who:"넷플러스막걸리",time:"3일 전",text:"금요일 밤 = 넷플릭스 + 막걸리 + 파전 배달. 이게 행복이지 뭐",drink:"막걸리 생",likes:33,liked:false,
+  cmts:[["비오는날","오늘 비까지 오면 완벽한데"]]},
+ {id:14,type:"talk",chan:"해장",who:"전주토박이",time:"3일 전",text:"콩나물국밥 해장 꿀팁: 수란 먼저 김+국물에 말아먹고 시작하는 겁니다. 오징어젓 필수",drink:null,likes:17,liked:false,
+  cmts:[["해장러","내일 아침 각이다"]]},
 ];
-let commOpen = new Set();
+let commCh="전체", commSort="hot", commOpen=new Set(), composerDrink=null, composerType="talk", cmtDrink={};
+const typeBadge=p=>p.type==="ask"?`<span class="tbdg ask">추천구함</span>`:p.type==="review"?`<span class="tbdg rev">리뷰</span>`:p.type==="vote"?`<span class="tbdg vot">투표</span>`:`<span class="tbdg">${p.chan}</span>`;
+function commFiltered(){
+  let r=COMM.slice();
+  if(commCh!=="전체"){
+    if(commCh==="추천구함") r=r.filter(p=>p.type==="ask");
+    else if(commCh==="리뷰") r=r.filter(p=>p.type==="review");
+    else if(commCh==="투표") r=r.filter(p=>p.type==="vote");
+    else r=r.filter(p=>p.chan===commCh);
+  }
+  if(commSort==="hot") r.sort((a,b)=>b.likes-a.likes);
+  return r;
+}
+function voteHTML(p){
+  const t=p.vote.ca+p.vote.cb, pa=Math.round(p.vote.ca/t*100), pb=100-pa, v=p.vote.voted;
+  return `<div class="vote">
+    <button class="vopt ${v==='a'?'on':''}" data-vote="${p.id}:a"><i style="width:${v?pa:0}%"></i><span>${p.vote.a}</span><b>${v?pa+'%':''}</b></button>
+    <button class="vopt ${v==='b'?'on':''}" data-vote="${p.id}:b"><i style="width:${v?pb:0}%"></i><span>${p.vote.b}</span><b>${v?pb+'%':''}</b></button>
+    <div class="vtotal">${t.toLocaleString()}명 참여${v?'':' · 눌러서 투표'}</div>
+  </div>`;
+}
+function postHTML(p){
+  const hot=p.likes>=30;
+  return `<div class="post">
+    <div class="phead"><div class="pav">${p.who[0]}</div><span class="pwho">${p.who}</span>${typeBadge(p)}${hot?`<span class="tbdg hot">HOT</span>`:''}<span class="ptime">${p.time}</span></div>
+    <div class="ptext">${p.text}</div>
+    ${p.drink?`<button class="pdrink" data-drinkname="${p.drink}"><b>◎</b> ${p.drink}</button>`:''}
+    ${p.vote?voteHTML(p):''}
+    <div class="pacts">
+      <button class="pact ${p.liked?'liked':''}" data-like="${p.id}">${p.liked?'♥':'♡'} 공감 ${p.likes}</button>
+      <button class="pact" data-cmt="${p.id}">💬 댓글 ${p.cmts.length}</button>
+      ${p.type==="ask"?`<button class="pact reco" data-recodrink="${p.id}">◎ 술 추천하기</button>`:''}
+    </div>
+    ${commOpen.has(p.id)?`<div class="cmts">
+      ${p.cmts.map(c=>`<div class="cmt"><b>${c[0]}</b><span>${c[1]}${c[2]?`<button class="cchip" data-drinkname="${c[2]}">◎ ${c[2]}</button>`:''}</span></div>`).join("")||`<div class="cmt"><span style="color:var(--ink-soft)">첫 댓글을 남겨보세요</span></div>`}
+      ${cmtDrink[p.id]?`<div class="cattach">추천할 술: <b>${cmtDrink[p.id]}</b><button data-clearcd="${p.id}">✕</button></div>`:''}
+      <div class="cmt-row"><input id="ci-${p.id}" placeholder="${p.type==='ask'?'추천 이유를 적어주세요':'댓글 달기'}" maxlength="120"><button class="cpk" data-pickcmt="${p.id}">◎</button><button data-cmtadd="${p.id}">등록</button></div>
+    </div>`:''}
+  </div>`;
+}
 function renderComm(){
   $("#s-comm").innerHTML = `
-    <div class="match-hd"><h2>수다방</h2><p>오늘 마신 술, 솔직한 의견을 나눠보세요</p></div>
-    <div class="composer">
-      <input id="postInput" placeholder="술 이야기를 나눠보세요" maxlength="200">
-      <button data-postadd>올리기</button>
-    </div>
-    ${COMM.map(p=>`<div class="post">
-      <div class="phead"><div class="pav">${p.who[0]}</div><span class="pwho">${p.who}</span><span class="ptime">${p.time}</span></div>
-      <div class="ptext">${p.text}</div>
-      ${p.drink?`<button class="pdrink" data-drinkname="${p.drink}"><b>◎</b> ${p.drink}</button>`:''}
-      <div class="pacts">
-        <button class="pact ${p.liked?'liked':''}" data-like="${p.id}">${p.liked?'♥':'♡'} 공감 ${p.likes}</button>
-        <button class="pact" data-cmt="${p.id}">💬 댓글 ${p.cmts.length}</button>
+    <div class="match-hd"><h2>수다방</h2><p>오늘 마신 술, 서로 추천하고 의견 나눠요</p></div>
+    <div class="tabs" style="padding-top:4px">${CHANNELS.map(c=>`<button class="chip ${commCh===c?'on':''}" data-commch="${c}">${c}</button>`).join("")}
+      <button class="chip ${commSort==='hot'?'on':''}" data-commsort="hot" style="margin-left:auto">인기</button>
+      <button class="chip ${commSort==='new'?'on':''}" data-commsort="new">최신</button></div>
+    <div class="cwrap">
+      <div class="ctypes">
+        <button class="tchip ${composerType==='talk'?'on':''}" data-ctype="talk">잡담</button>
+        <button class="tchip ${composerType==='ask'?'on':''}" data-ctype="ask">추천구함</button>
+        <button class="tchip ${composerType==='review'?'on':''}" data-ctype="review">리뷰</button>
+        <button class="tchip pick ${composerDrink?'on':''}" data-pickpost>◎ ${composerDrink||'술 첨부'}</button>
       </div>
-      ${commOpen.has(p.id)?`<div class="cmts">
-        ${p.cmts.map(([w,t])=>`<div class="cmt"><b>${w}</b><span>${t}</span></div>`).join("")||`<div class="cmt"><span style="color:var(--ink-soft)">첫 댓글을 남겨보세요</span></div>`}
-        <div class="cmt-row"><input id="ci-${p.id}" placeholder="댓글 달기" maxlength="120"><button data-cmtadd="${p.id}">등록</button></div>
-      </div>`:''}
-    </div>`).join("")}
+      <div class="composer" style="margin:8px 0 0">
+        <input id="postInput" placeholder="${composerType==='ask'?'어떤 술을 찾고 있나요?':composerType==='review'?'마신 술 솔직 후기를 남겨주세요':'술 이야기를 나눠보세요'}" maxlength="200">
+        <button data-postadd>올리기</button>
+      </div>
+    </div>
+    ${commFiltered().map(postHTML).join("")||`<div class="empty">이 채널의 첫 글을 남겨보세요</div>`}
     <div class="foot"><div class="fwarn">건전한 음주 문화를 위해 비방·광고성 게시물은 제재될 수 있어요.</div></div>`;
 }
+/* 술 선택 픽커 (글/댓글에 술 태그) */
+function openPicker(){
+  const list=q=>DATA.filter(d=>!q||(d.name+d.cat).includes(q)).slice(0,30)
+    .map(d=>`<button class="pkitem" data-pick="${d.name}"><span class="pkc">${d.cat}</span>${d.name}<b>★ ${d.rating.toFixed(1)}</b></button>`).join("");
+  $("#sheet").innerHTML=`<div class="grab"></div>
+    <div class="match-hd" style="padding-top:14px"><h2>술 선택</h2><p>글에 태그할 술을 골라주세요</p></div>
+    <div class="composer" style="margin:0 20px 10px"><input id="pkq" placeholder="술 이름 검색"></div>
+    <div class="pklist" id="pklist">${list("")}</div>`;
+  $("#scrim").classList.add("open"); $("#sheet").classList.add("open"); $("#sheet").scrollTop=0;
+  $("#pkq").addEventListener("input",e=>{ $("#pklist").innerHTML=list(e.target.value.trim()); });
+}
+let pickFor=null;
 document.addEventListener("click",e=>{
-  const like=e.target.closest("[data-like]");
+  const t=e.target;
+  const like=t.closest("[data-like]");
   if(like){ const p=COMM.find(x=>x.id==like.dataset.like); if(p){ p.liked=!p.liked; p.likes+=p.liked?1:-1; renderComm(); } return; }
-  const cm=e.target.closest("[data-cmt]");
+  const cm=t.closest("[data-cmt]");
   if(cm){ const id=+cm.dataset.cmt; commOpen.has(id)?commOpen.delete(id):commOpen.add(id); renderComm(); return; }
-  const ca=e.target.closest("[data-cmtadd]");
+  const vt=t.closest("[data-vote]");
+  if(vt){ const [id,side]=vt.dataset.vote.split(":"); const p=COMM.find(x=>x.id==+id);
+    if(p&&!p.vote.voted){ p.vote.voted=side; side==="a"?p.vote.ca++:p.vote.cb++; renderComm(); toast("투표 완료!"); }
+    else if(p&&p.vote.voted){ toast("이미 투표하셨어요"); } return; }
+  const rc=t.closest("[data-recodrink]");
+  if(rc){ const id=+rc.dataset.recodrink; commOpen.add(id); pickFor={kind:"cmt",id}; openPicker(); return; }
+  const pc=t.closest("[data-pickcmt]");
+  if(pc){ pickFor={kind:"cmt",id:+pc.dataset.pickcmt}; openPicker(); return; }
+  const pp=t.closest("[data-pickpost]");
+  if(pp){ pickFor={kind:"post"}; openPicker(); return; }
+  const pk=t.closest("[data-pick]");
+  if(pk){ const nm=pk.dataset.pick;
+    if(pickFor&&pickFor.kind==="cmt"){ cmtDrink[pickFor.id]=nm; } else { composerDrink=nm; }
+    pickFor=null; closeSheet(); renderComm(); toast(`"${nm}" 태그됨`); return; }
+  const cc=t.closest("[data-clearcd]");
+  if(cc){ delete cmtDrink[+cc.dataset.clearcd]; renderComm(); return; }
+  const ct=t.closest("[data-ctype]");
+  if(ct){ composerType=ct.dataset.ctype; renderComm(); return; }
+  const ch=t.closest("[data-commch]");
+  if(ch){ commCh=ch.dataset.commch; renderComm(); return; }
+  const cs=t.closest("[data-commsort]");
+  if(cs){ commSort=cs.dataset.commsort; renderComm(); return; }
+  const ca=t.closest("[data-cmtadd]");
   if(ca){ const id=+ca.dataset.cmtadd; const inp=$("#ci-"+id); const v=(inp&&inp.value.trim())||"";
-    if(!v){ toast("댓글을 입력해주세요"); return; }
-    const p=COMM.find(x=>x.id===id); p.cmts.push(["나",v]); renderComm(); toast("댓글을 남겼어요"); return; }
-  const pa=e.target.closest("[data-postadd]");
+    const dk=cmtDrink[id]||null;
+    if(!v&&!dk){ toast("댓글을 입력해주세요"); return; }
+    const p=COMM.find(x=>x.id===id); p.cmts.push(["나",v||"이거 추천해요!",dk]); delete cmtDrink[id];
+    renderComm(); toast(dk?"술 추천을 남겼어요 ◎":"댓글을 남겼어요"); return; }
+  const pa=t.closest("[data-postadd]");
   if(pa){ const inp=$("#postInput"); const v=(inp&&inp.value.trim())||"";
     if(!v){ toast("내용을 입력해주세요"); return; }
-    COMM.unshift({ id:Date.now(), who:"나", time:"방금 전", text:v, drink:null, likes:0, liked:false, cmts:[] });
-    renderComm(); toast("게시글을 올렸어요"); return; }
-  const dn=e.target.closest("[data-drinkname]");
+    const chan=composerType==="ask"?"추천구함":composerType==="review"?"리뷰":"혼술";
+    COMM.unshift({ id:Date.now(), type:composerType, chan, who:"나", time:"방금 전", text:v, drink:composerDrink, likes:0, liked:false, cmts:[] });
+    composerDrink=null; renderComm(); toast(composerType==="ask"?"추천 요청을 올렸어요! 답이 달릴 거예요":"게시글을 올렸어요"); return; }
+  const dn=t.closest("[data-drinkname]");
   if(dn){ const d=DATA.find(x=>x.name===dn.dataset.drinkname); if(d) openSheet(d); return; }
 });
 

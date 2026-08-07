@@ -1,0 +1,354 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>홍술 로고 500 — 제너레이티브</title>
+<style>
+  :root{ --accent:#FF4F87; --bg:#0E0B0D; --card:#171216; --ink:#F4EDF1; --sub:#8B7D85; --hair:#262026; }
+  *{box-sizing:border-box}
+  body{margin:0;background:#000;color:var(--ink);font-family:'Pretendard Variable',Pretendard,-apple-system,system-ui,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:440px;margin:0 auto;background:var(--bg);min-height:100vh;padding:26px 16px 60px}
+  h1{font-size:19px;font-weight:800;letter-spacing:-.3px;margin:0 0 4px}
+  .sub{color:var(--sub);font-size:12px;margin:0 0 14px;line-height:1.6}
+  .fam{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+  .fam span{font-size:10px;color:var(--sub);border:1px solid var(--hair);border-radius:12px;padding:3px 8px}
+  .fam b{color:var(--accent)}
+  .sec{font-size:13px;font-weight:800;margin:22px 2px 10px;color:var(--ink)}
+  .sec small{color:var(--sub);font-weight:600;margin-left:6px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  .cell{background:var(--card);border:1px solid var(--hair);border-radius:13px;padding:10px 4px 7px;text-align:center;cursor:pointer;transition:transform .1s ease-out;content-visibility:auto;contain-intrinsic-size:auto 88px}
+  .cell:active{transform:scale(.94)}
+  .cell svg{width:50px;height:50px;display:block;margin:0 auto}
+  .cell b{display:block;font-size:9.5px;color:var(--sub);margin-top:5px;font-weight:700}
+  .scrim{position:fixed;inset:0;background:rgba(5,3,5,.82);display:none;align-items:center;justify-content:center;z-index:50;padding:30px}
+  .scrim.on{display:flex}
+  .modal{background:var(--card);border:1px solid var(--hair);border-radius:20px;padding:26px 22px;text-align:center;max-width:300px;width:100%}
+  .modal svg{width:150px;height:150px;display:block;margin:0 auto 12px}
+  .modal .no{font-size:18px;font-weight:800;color:var(--accent)}
+  .modal .nm{font-size:11.5px;color:var(--sub);margin-top:4px;line-height:1.6}
+  .modal .tip{font-size:10.5px;color:var(--sub);margin-top:13px;padding-top:11px;border-top:1px dashed var(--hair)}
+  .fx-neon{filter:drop-shadow(0 0 4px rgba(255,79,135,.9)) drop-shadow(0 0 10px rgba(255,79,135,.45))}
+</style>
+<div class="wrap">
+  <h1>홍술 로고 제너레이티브 1300</h1>
+  <p class="sub">ㅎㅅ 리가처 · 잔 · 병 · 문자 · 추상 + 마스코트 · 씬 배지 · 타이포 확장 · 픽셀 · 스타일 리믹스.<br>탭하면 크게 보여요. 마음에 드는 <b style="color:var(--accent)">번호</b>를 말씀해주세요.</p>
+  <div class="fam">
+    <span><b>1–180</b> ㅎㅅ</span><span><b>181–260</b> 잔</span><span><b>261–340</b> 병</span>
+    <span><b>341–420</b> 문자</span><span><b>421–500</b> 추상</span><span style="border-color:var(--accent)"><b>501–600</b> 샤프 ㅎㅅ</span>
+    <span style="border-color:var(--accent)"><b>601–680</b> 블레이드 잔</span><span style="border-color:var(--accent)"><b>681–760</b> 샤프 심볼</span>
+    <span style="border-color:var(--accent)"><b>761–860</b> 타이포 샤프</span><span style="border-color:var(--accent)"><b>861–1000</b> 샤프 리믹스</span>
+    <span style="border-color:var(--accent);color:var(--accent);font-weight:800"><b>1001–1300</b> 청키 솔리드 ★ (픽 스타일)</span>
+  </div>
+  <div id="root"></div>
+</div>
+<div class="scrim" id="scrim"><div class="modal" id="modal"></div></div>
+<script>
+const INK="#F4EDF1", PINK="#FF4F87", DARK="#14090e";
+const S=(c,w)=>`stroke="${c}" stroke-width="${w||1.7}" stroke-linecap="round" stroke-linejoin="round"`;
+
+/* ---------- 공통 프레임/틸트 ---------- */
+function wrapFx(core,{tilt,frame,inv}){
+  if(tilt) core=`<g transform="rotate(-9 12 12)">${core}</g>`;
+  if(frame===1) core=`<circle cx="12" cy="12" r="11" ${S(PINK,.9)} fill="none"/><g transform="translate(2.6 2.6) scale(.78)">${core}</g>`;
+  if(frame===2) core=`<circle cx="12" cy="12" r="11" fill="${PINK}"/><g transform="translate(2.6 2.6) scale(.78)">${core}</g>`;
+  if(frame===3) core=`<rect x="1.6" y="1.6" width="20.8" height="20.8" rx="5.6" fill="${PINK}"/><g transform="translate(2.9 2.9) scale(.76)">${core}</g>`;
+  return core;
+}
+const fxName=fx=>[(fx.tilt?"기울임":""),(fx.frame===1?"링":fx.frame===2?"원배지":fx.frame===3?"앱아이콘":"")].filter(Boolean).join(" · ");
+
+/* ---------- 1) ㅎㅅ 리가처 (180) ---------- */
+const HATS=[["민머리",()=>``],
+ ["클래식ㅎ",st=>`<path d="M9.6 1.9h4.8" ${st}/><path d="M7 4.7h10" ${st}/>`],
+ ["한획",st=>`<path d="M7 4.7h10" ${st}/>`],
+ ["점모자",st=>`<path d="M9.9 3.2h4.2" ${st}/>`],
+ ["반짝",st=>`<path d="M7 4.9h10" ${st}/><path d="M12 .9v2.2M10.9 2h2.2" ${st}/>`]];
+const BOWLS=[
+ ["물결볼",(st,fl)=>`<circle cx="12" cy="10.4" r="4.9" fill="none" ${st}/><path d="M7.7 11c1.6-.85 3-.35 4.4.1 1.4.45 2.9.35 4.3-.3a4.9 4.9 0 0 1-8.7.2z" fill="${fl}"/>`],
+ ["보름달볼",(st,fl)=>`<circle cx="12" cy="10.4" r="4.9" fill="${fl}"/><circle cx="10.3" cy="8.7" r=".85" fill="${fl===PINK?'#fff':PINK}" opacity=".8"/>`],
+ ["반달볼",(st,fl)=>`<circle cx="12" cy="10.4" r="4.9" fill="none" ${st}/><path d="M7.1 10.4a4.9 4.9 0 0 0 9.8 0z" fill="${fl}"/>`],
+ ["홍점볼",(st,fl)=>`<circle cx="12" cy="10.4" r="4.9" fill="none" ${st}/><circle cx="12" cy="10.9" r="1.7" fill="${fl}"/>`],
+ ["빈잔볼",(st,fl)=>`<circle cx="12" cy="10.4" r="4.9" fill="none" ${st}/>`],
+ ["핑크링볼",(st,fl)=>`<circle cx="12" cy="10.4" r="4.7" fill="none" stroke="${fl}" stroke-width="2.4"/>`]];
+const LEGS=[
+ ["ㅅ다리",st=>`<path d="M12 15.3 8.5 21.6M12 15.3l3.5 6.3" ${st}/>`],
+ ["와이드ㅅ",st=>`<path d="M12 15.3 7.1 21.9M12 15.3l4.9 6.6" ${st}/>`],
+ ["스템",st=>`<path d="M12 15.3v4.3M8.8 21.5h6.4" ${st}/>`],
+ ["곡선ㅅ",st=>`<path d="M12 15.3C10.9 18 9.7 19.9 8.3 21.5M12 15.3c1.1 2.7 2.3 4.6 3.7 6.2" ${st}/>`]];
+const EXTRAS=[["",()=>``],
+ ["버블",fl=>`<circle cx="18.2" cy="2.9" r="1" fill="${fl}"/><circle cx="19.7" cy="5.3" r=".6" fill="${fl}"/><circle cx="17.2" cy="6.1" r=".45" fill="${fl}"/>`],
+ ["달동무",fl=>`<circle cx="19" cy="3.6" r="1.9" fill="${fl}"/>`],
+ ["빨대",fl=>`<path d="M14.1 9.2 18.5 3.4" ${S(fl,1.5)}/>`]];
+function ligMark(i){
+  const b=i%6,l=(i/6|0)%4,h=(i/24|0)%5;
+  const fx={tilt:i%13===4,frame:(i%17===8)?1:(i%23===11)?2:(i%29===2)?3:0};
+  const inv=fx.frame===2||fx.frame===3;
+  const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const st=S(ink);
+  const e=(i*7+3)%4;
+  const core=HATS[h][1](st)+BOWLS[b][1](st,fill)+LEGS[l][1](st)+EXTRAS[e][1](inv?"#fff":PINK);
+  return {svg:wrapFx(core,fx),name:[HATS[h][0],BOWLS[b][0],LEGS[l][0],EXTRAS[e][0],fxName(fx)].filter(Boolean).join(" · ")};
+}
+
+/* ---------- 2) 잔 (80) ---------- */
+const CUPFORMS=[
+ ["소주잔",(st,fl,liq)=>`<path d="M7.3 6.4h9.4l-.85 9.6a2 2 0 0 1-2 1.8h-3.7a2 2 0 0 1-2-1.8z" fill="none" ${st}/>${liq?`<path d="M8.1 10.6h7.8l-.5 5.3a1.6 1.6 0 0 1-1.6 1.45h-3.6a1.6 1.6 0 0 1-1.6-1.45z" fill="${fl}"/>`:``}`],
+ ["맥주잔",(st,fl,liq)=>`<rect x="6.4" y="7" width="8.8" height="11.4" rx="1.7" fill="none" ${st}/><path d="M15.4 9.4h1.3a2.4 2.4 0 0 1 0 6.4h-1.3" fill="none" ${st}/>${liq?`<rect x="7.9" y="11" width="5.8" height="5.9" rx="1" fill="${fl}"/>`:``}<circle cx="8.6" cy="6.3" r="1.15" fill="${fl}"/><circle cx="11" cy="5.7" r="1.3" fill="${fl}"/><circle cx="13.3" cy="6.4" r="1" fill="${fl}"/>`],
+ ["마티니",(st,fl,liq)=>`<path d="M5.6 4.6h12.8L12 12.4z" fill="none" ${st}/>${liq?`<path d="M8.4 6.7h7.2L12 11z" fill="${fl}"/>`:``}<path d="M12 12.4v5.6M8.8 21h6.4" ${st}/>`],
+ ["온더락",(st,fl,liq)=>`<rect x="6.6" y="6.8" width="10.8" height="11.6" rx="1.9" fill="none" ${st}/>${liq?`<rect x="8" y="12.2" width="8" height="4.8" rx="1.1" fill="${fl}"/>`:``}<rect x="9.2" y="9.2" width="3.4" height="3.4" rx="1" fill="none" ${S(INK,1.2)} transform="rotate(12 10.9 10.9)"/>`],
+ ["플루트",(st,fl,liq)=>`<path d="M9.7 3.4h4.6l-.55 8a1.75 1.75 0 0 1-1.75 1.6 1.75 1.75 0 0 1-1.75-1.6z" fill="none" ${st}/>${liq?`<path d="M10.1 6.4h3.8l-.33 4.9a1.4 1.4 0 0 1-2.8 0z" fill="${fl}"/>`:``}<path d="M12 13v5.4M9.2 21h5.6" ${st}/>`]];
+const CUPEX=[["",()=>``],
+ ["버블",fl=>`<circle cx="18.7" cy="3.3" r=".95" fill="${fl}"/><circle cx="20" cy="5.6" r=".55" fill="${fl}"/>`],
+ ["체리",fl=>`<circle cx="17.6" cy="4.4" r="1.25" fill="${fl}"/><path d="M17.6 3.2c.4-1 .9-1.5 1.9-1.8" ${S(fl,1)} fill="none"/>`],
+ ["반짝",fl=>`<path d="M19 2.4v2.4M17.8 3.6h2.4" ${S(fl,1.3)}/>`]];
+function cupMark(i){
+  const f=(i/16|0)%5, liq=i%4!==1, e=(i/4|0)%4;
+  const fx={tilt:i%11===5,frame:(i%19===7)?2:(i%13===9)?1:0};
+  const inv=fx.frame===2; const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const core=CUPFORMS[f][1](S(ink),fill,liq)+CUPEX[e][1](inv?"#fff":PINK);
+  return {svg:wrapFx(core,fx),name:[CUPFORMS[f][0],(liq?"":"빈잔"),CUPEX[e][0],fxName(fx)].filter(Boolean).join(" · ")};
+}
+
+/* ---------- 3) 병 (80) ---------- */
+const BOTTLES=[
+ ["소주병",(st,fl,mode)=>{
+   const body=`M9.9 5.4V3.2h4.2v2.2c1.6.8 2.5 2.3 2.5 4.1v8.6a2 2 0 0 1-2 1.9H9.4a2 2 0 0 1-2-1.9V9.5c0-1.8.9-3.3 2.5-4.1z`;
+   return mode==="solid"?`<path d="${body}" fill="${fl}"/><rect x="9.9" y="1.4" width="4.2" height="1.5" rx=".5" fill="${fl}"/>`
+   :`<path d="${body}" fill="none" ${st}/><rect x="9.9" y="1.4" width="4.2" height="1.5" rx=".5" fill="none" ${st}/>`+
+    (mode==="label"?`<rect x="7.4" y="10.6" width="9.2" height="4.6" rx="1" fill="${fl}"/>`:mode==="half"?`<path d="M7.4 13h9.2v5.1a2 2 0 0 1-2 1.9H9.4a2 2 0 0 1-2-1.9z" fill="${fl}"/>`:``);}],
+ ["와인병",(st,fl,mode)=>{
+   const body=`M10.6 2.6h2.8v4.6c1.9.9 2.8 2.5 2.8 4.5v7.4a1.9 1.9 0 0 1-1.9 1.8h-4.6a1.9 1.9 0 0 1-1.9-1.8v-7.4c0-2 .9-3.6 2.8-4.5z`;
+   return mode==="solid"?`<path d="${body}" fill="${fl}"/>`
+   :`<path d="${body}" fill="none" ${st}/>`+(mode==="label"?`<rect x="8.6" y="12" width="6.8" height="4.2" rx=".9" fill="${fl}"/>`:mode==="half"?`<path d="M7.8 14h8.4v4.1a1.9 1.9 0 0 1-1.9 1.8h-4.6a1.9 1.9 0 0 1-1.9-1.8z" fill="${fl}"/>`:``);}],
+ ["호리병",(st,fl,mode)=>{
+   const body=`M10.9 2.4h2.2v3.4c2.6 1 4.3 3.3 4.3 6.4a5.4 5.4 0 1 1-10.8 0c0-3.1 1.7-5.4 4.3-6.4z`;
+   return mode==="solid"?`<path d="${body}" fill="${fl}"/>`
+   :`<path d="${body}" fill="none" ${st}/>`+(mode==="half"?`<path d="M6.9 13.4a5.1 5.1 0 0 0 10.2 0z" fill="${fl}"/>`:mode==="label"?`<circle cx="12" cy="12.6" r="2.1" fill="${fl}"/>`:``);}],
+ ["캔",(st,fl,mode)=>{
+   return mode==="solid"?`<rect x="7.6" y="3.6" width="8.8" height="17" rx="2.2" fill="${fl}"/><path d="M9.4 6.2h5.2" ${S(mode==="solid"?"#fff":fl,1.2)}/>`
+   :`<rect x="7.6" y="3.6" width="8.8" height="17" rx="2.2" fill="none" ${st}/><path d="M9.6 2.4h4.8" ${st}/>`+(mode==="label"?`<rect x="7.6" y="9.4" width="8.8" height="5" fill="${fl}"/>`:mode==="half"?`<rect x="7.6" y="13" width="8.8" height="7.6" rx="2.2" fill="${fl}"/>`:``);}]];
+const BMODES=["outline","solid","label","half","outline"];
+function botMark(i){
+  const f=(i/20|0)%4, m=BMODES[i%5], e=(i/5|0)%4;
+  const fx={tilt:i%14===6,frame:(i%21===9)?1:(i%27===13)?3:0};
+  const inv=fx.frame===3; const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const core=BOTTLES[f][1](S(ink),fill,m)+EXTRAS[e][1](inv?"#fff":PINK);
+  const mn={outline:"라인",solid:"솔리드",label:"라벨",half:"반병"}[m];
+  return {svg:wrapFx(core,fx),name:[BOTTLES[f][0],mn,EXTRAS[e][0],fxName(fx)].filter(Boolean).join(" · ")};
+}
+
+/* ---------- 4) 문자·도장 (80) ---------- */
+function textMark(i){
+  const t=(i/13|0)%6, v=i%13;
+  const frame=(v%4===1)?1:(v%4===2)?2:(v%4===3)?3:0;
+  const inv=frame===2||frame===3;
+  const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const tilt=v%5===4;
+  let core="", nm="";
+  if(t===0){ nm="홍 링"; core=`<circle cx="12" cy="12" r="9.2" fill="none" ${S(fill,1.4)}/><text x="12" y="16.2" text-anchor="middle" font-size="11" font-weight="800" fill="${ink}" font-family="inherit">홍</text>`; }
+  else if(t===1){ nm="술 스퀘어"; core=`<rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4.4" fill="${fill}"/><text x="12" y="16.4" text-anchor="middle" font-size="10.5" font-weight="800" fill="${inv?PINK:DARK}" font-family="inherit">술</text>`; }
+  else if(t===2){ nm="홍술 도장"; core=`<rect x="4.6" y="2.6" width="14.8" height="18.8" rx="3.4" fill="${fill}"/><text x="12" y="11" text-anchor="middle" font-size="6.8" font-weight="800" fill="${inv?PINK:DARK}" font-family="inherit">홍</text><text x="12" y="19" text-anchor="middle" font-size="6.8" font-weight="800" fill="${inv?PINK:DARK}" font-family="inherit">술</text>`; }
+  else if(t===3){ nm="HS 모노그램"; core=`<text x="12" y="17.4" text-anchor="middle" font-size="14.5" font-weight="900" fill="${ink}" font-family="inherit" letter-spacing="-1">H<tspan fill="${fill}">S</tspan></text>`; }
+  else if(t===4){ nm="ㅎㅅ 글리프"; core=`<text x="7.6" y="16.6" text-anchor="middle" font-size="12.5" font-weight="900" fill="${ink}" font-family="inherit">ㅎ</text><text x="16.4" y="16.6" text-anchor="middle" font-size="12.5" font-weight="900" fill="${fill}" font-family="inherit">ㅅ</text>`; }
+  else { nm="홍술 점"; core=`<text x="11" y="16.2" text-anchor="middle" font-size="9.4" font-weight="900" fill="${ink}" font-family="inherit" letter-spacing="-.6">홍술</text><circle cx="19.4" cy="15.2" r="1.5" fill="${fill}"/>`; }
+  return {svg:wrapFx(core,{tilt,frame}),name:[nm,fxName({tilt,frame})].filter(Boolean).join(" · ")};
+}
+
+/* ---------- 5) 추상 (80) ---------- */
+const ABST=[
+ ["홍방울",(ink,fill)=>`<path d="M12 2.6c3.4 4.2 5.6 7.3 5.6 10.4a5.6 5.6 0 1 1-11.2 0C6.4 9.9 8.6 6.8 12 2.6z" fill="${fill}"/><circle cx="9.9" cy="12.6" r="1.2" fill="#fff" opacity=".8"/>`],
+ ["리플",(ink,fill)=>`<circle cx="12" cy="12" r="2" fill="${fill}"/><path d="M5.8 12a6.2 6.2 0 0 1 12.4 0" fill="none" ${S(ink,1.5)}/><path d="M2.9 12a9.1 9.1 0 0 1 18.2 0" fill="none" ${S(ink,1.1)} opacity=".55"/>`],
+ ["달산",(ink,fill)=>`<circle cx="15.6" cy="7.4" r="3.4" fill="${fill}"/><path d="M3.4 20 9.6 9.8 14 17l3-4.6 3.6 7.6z" fill="none" ${S(ink,1.6)}/>`],
+ ["하트잔",(ink,fill)=>`<path d="M12 13.8C8.8 11 7 9.2 7 6.9A2.9 2.9 0 0 1 12 5a2.9 2.9 0 0 1 5 1.9c0 2.3-1.8 4.1-5 6.9z" fill="${fill}"/><path d="M12 13.8v4M8.8 21h6.4" ${S(ink)}/>`],
+ ["소용돌이",(ink,fill)=>`<path d="M12 4.4a7.6 7.6 0 1 1-7.6 7.6" fill="none" ${S(fill,1.9)}/><path d="M12 8a4 4 0 1 1-4 4" fill="none" ${S(ink,1.6)}/><circle cx="12" cy="12" r="1.1" fill="${fill}"/>`],
+ ["건배",(ink,fill)=>`<g transform="rotate(-16 8 14)"><path d="M5.2 8.8h5.6l-.55 6.4a1.55 1.55 0 0 1-1.55 1.4H7.3a1.55 1.55 0 0 1-1.55-1.4z" fill="none" ${S(ink,1.5)}/></g><g transform="rotate(16 16 14)"><path d="M13.2 8.8h5.6l-.55 6.4a1.55 1.55 0 0 1-1.55 1.4h-1.4a1.55 1.55 0 0 1-1.55-1.4z" fill="none" ${S(ink,1.5)}/></g><path d="M12 2.8v2M9.4 3.9l1.1 1.5M14.6 3.9l-1.1 1.5" ${S(fill,1.5)}/>`],
+ ["반달바",(ink,fill)=>`<path d="M6.6 6.2h10.8" ${S(ink,1.8)}/><path d="M6.9 10.2a5.1 5.1 0 0 0 10.2 0z" fill="${fill}"/><path d="M12 15.6v3.8M9 21h6" ${S(ink,1.8)}/>`],
+ ["더블링",(ink,fill)=>`<circle cx="9.4" cy="12" r="5.6" fill="none" ${S(ink,1.6)}/><circle cx="14.6" cy="12" r="5.6" fill="none" ${S(fill,1.6)}/>`]];
+function absMark(i){
+  const t=(i/10|0)%8, v=i%10;
+  const fx={tilt:v===7,frame:(v===3)?1:(v===5)?2:(v===8)?3:0};
+  const inv=fx.frame===2||fx.frame===3;
+  const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const core=ABST[t][1](ink,fill)+((v===2||v===6)?EXTRAS[1][1](inv?"#fff":PINK):``);
+  return {svg:wrapFx(core,fx),name:[ABST[t][0],(v===2||v===6)?"버블":"",fxName(fx)].filter(Boolean).join(" · ")};
+}
+
+/* ========== 샤프 계열 (501–1000) — 각진 캡·마이터·직선 ========== */
+const SB=(c,w)=>`stroke="${c}" stroke-width="${w||1.7}" stroke-linecap="butt" stroke-linejoin="miter"`;
+function wrapSharp(core,{tilt,frame}){
+  if(tilt) core=`<g transform="rotate(-8 12 12)">${core}</g>`;
+  if(frame===1) core=`<rect x="4.6" y="4.6" width="14.8" height="14.8" ${SB(PINK,1)} fill="none" transform="rotate(45 12 12)"/><g transform="translate(4.8 4.8) scale(.6)">${core}</g>`;
+  if(frame===2) core=`<rect x="4.2" y="4.2" width="15.6" height="15.6" fill="${PINK}" transform="rotate(45 12 12)"/><g transform="translate(5.2 5.2) scale(.57)">${core}</g>`;
+  if(frame===3) core=`<path d="M12 1.4 21.2 6.7v10.6L12 22.6 2.8 17.3V6.7z" ${SB(PINK,1)} fill="none"/><g transform="translate(3.1 3.1) scale(.74)">${core}</g>`;
+  return core;
+}
+const sfxName=fx=>[(fx.tilt?"기울임":""),(fx.frame===1?"다이아링":fx.frame===2?"다이아배지":fx.frame===3?"헥스":"")].filter(Boolean).join(" · ");
+const SHATS=[["민머리",()=>``],
+ ["더블바",st=>`<path d="M9.4 1.8h5.2M6.8 4.6h10.4" ${st}/>`],
+ ["싱글바",st=>`<path d="M6.8 4.6h10.4" ${st}/>`],
+ ["사선획",st=>`<path d="M8.2 4.9 15.8 2.3" ${st}/>`]];
+const SBOWLS=[
+ ["다이아볼",(st,fl)=>`<path d="M12 5.4 16.9 10.4 12 15.4 7.1 10.4z" fill="none" ${st}/><path d="M8.3 11.6 12 15.4l3.7-3.8z" fill="${fl}"/>`],
+ ["헥사볼",(st,fl)=>`<path d="M9.3 5.7h5.4l2.7 4.7-2.7 4.7H9.3l-2.7-4.7z" fill="none" ${st}/><path d="M8.1 11.6l1.2 3.5h5.4l1.2-3.5z" fill="${fl}"/>`],
+ ["V볼",(st,fl)=>`<path d="M6.6 5.6h10.8L12 15.1z" fill="none" ${st}/><path d="M9.2 8.9h5.6L12 13.8z" fill="${fl}"/>`],
+ ["각컵볼",(st,fl)=>`<path d="M7.4 5.6h9.2l-1 9.5H8.4z" fill="none" ${st}/><path d="M8.2 10 10 9.2l2 .8 2-.8 1.8.8-.55 5.1H8.75z" fill="${fl}"/>`],
+ ["크리스탈",(st,fl)=>`<path d="M12 5.4 16.9 10.4 12 15.4 7.1 10.4z" fill="none" ${st}/><path d="M7.1 10.4h9.8M12 5.4v10" ${SB(INK,.9)} opacity=".6"/><path d="M12 10.4l4.9 0L12 15.4z" fill="${fl}"/>`]];
+const SLEGS=[
+ ["V다리",st=>`<path d="M12 15.4 8.3 21.8M12 15.4l3.7 6.4" ${st}/>`],
+ ["X크로스",st=>`<path d="M9.4 15.4 14.8 21.8M14.6 15.4 9.2 21.8" ${st}/>`],
+ ["스파이크스템",st=>`<path d="M12 15.4v3.2" ${st}/><path d="M12 18.4 14.2 20.5 12 22.6 9.8 20.5z" ${st} fill="none"/>`],
+ ["지그재그",st=>`<path d="M12 15.4 10 17.6 12.6 19.4 10.6 21.8M12 15.4 14 17.6 11.4 19.4 13.4 21.8" ${st}/>`]];
+const SEXTRA=[["",()=>``],
+ ["번개",fl=>`<path d="M19.3 1.6 16.4 6h1.9l-2.5 4.3 4.7-5.4h-2z" fill="${fl}"/>`],
+ ["각별",fl=>`<path d="M18.6 2.2 19.4 4.6 21.8 5.4 19.4 6.2 18.6 8.6 17.8 6.2 15.4 5.4 17.8 4.6z" fill="${fl}"/>`],
+ ["슬래시",fl=>`<path d="M17 2.4 20.6 6M18.8 1.6 22 4.8" ${SB(fl,1.2)}/>`]];
+function sharpCore(i,ink,fill){
+  const b=i%5,l=(i/5|0)%4,h=(i/20|0)%4,e=(i*3+1)%4;
+  const st=SB(ink);
+  return {core:SHATS[h][1](st)+SBOWLS[b][1](st,fill)+SLEGS[l][1](st)+SEXTRA[e][1](fill),
+    name:[SHATS[h][0],SBOWLS[b][0],SLEGS[l][0],SEXTRA[e][0]].filter(Boolean).join(" · ")};
+}
+function sharpLig(i){
+  const fx={tilt:i%11===6,frame:(i%13===5)?1:(i%17===9)?2:(i%19===14)?3:0};
+  const inv=fx.frame===2; const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const c=sharpCore(i,ink,fill);
+  return {svg:wrapSharp(c.core,fx),name:[c.name,sfxName(fx)].filter(Boolean).join(" · ")};
+}
+const BLADES=[
+ ["마티니V",(st,fl,liq)=>`<path d="M5.4 4.4h13.2L12 12.6z" fill="none" ${st}/>${liq?`<path d="M8.3 6.6h7.4L12 11.2z" fill="${fl}"/>`:``}<path d="M12 12.6v5.4M8.6 21.2h6.8" ${st}/>`],
+ ["다이아쿠페",(st,fl,liq)=>`<path d="M6.8 5.2h10.4L12 11.8z" fill="none" ${st}/><path d="M6.8 5.2 12 11.8 17.2 5.2" fill="none" ${st}/>${liq?`<path d="M9 6.9h6L12 10.4z" fill="${fl}"/>`:``}<path d="M12 11.8v6.2M9 21.4h6" ${st}/>`],
+ ["각온더락",(st,fl,liq)=>`<path d="M6.8 6h10.4l-.7 12.4H7.5z" fill="none" ${st}/>${liq?`<path d="M7.7 12h8.6l-.4 6.4H8.1z" fill="${fl}"/>`:``}<path d="M9.6 8.6 12.8 11.8M12.8 8.6 9.6 11.8" ${SB(INK,1.1)}/>`],
+ ["삼각플루트",(st,fl,liq)=>`<path d="M9.4 3.2h5.2L12 13.4z" fill="none" ${st}/>${liq?`<path d="M10.3 5.4h3.4L12 11.2z" fill="${fl}"/>`:``}<path d="M12 13.4v5M9.2 21.2h5.6" ${st}/>`]];
+function bladeCup(i){
+  const f=i%4, liq=(i/4|0)%2===0, e=(i/8|0)%4;
+  const fx={tilt:i%9===4,frame:(i%14===6)?1:(i%23===11)?2:0};
+  const inv=fx.frame===2; const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const core=BLADES[f][1](SB(ink),fill,liq)+SEXTRA[e][1](inv?"#fff":PINK);
+  return {svg:wrapSharp(core,fx),name:[BLADES[f][0],(liq?"":"빈잔"),SEXTRA[e][0],sfxName(fx)].filter(Boolean).join(" · ")};
+}
+const SSYM=[
+ ["번개잔",(ink,fill)=>`<path d="M6.6 4.6h10.8L12 13z" fill="none" ${SB(ink)}/><path d="M13.5 5.6 10.9 9.5h1.7L10.4 13l4.4-4.9h-1.8l1.7-2.5z" fill="${fill}"/><path d="M12 13v5.4M8.8 21.2h6.4" ${SB(ink)}/>`],
+ ["크리스탈방울",(ink,fill)=>`<path d="M12 2.2 17.2 12l-5.2 9.8L6.8 12z" fill="none" ${SB(ink)}/><path d="M12 8.2 14.6 12 12 17.4 9.4 12z" fill="${fill}"/>`],
+ ["산맥병",(ink,fill)=>`<path d="M10.3 2.6h3.4v3l2.9 2.6v12.6H7.4V8.2l2.9-2.6z" fill="none" ${SB(ink)}/><path d="M7.4 16.6 10 13l2 2.4 2.2-3 3.2 4.2v4.2H7.4z" fill="${fill}"/>`],
+ ["X건배",(ink,fill)=>`<path d="M4.6 4.6 11 9.2l-2.6 9.4" fill="none" ${SB(ink)}/><path d="M19.4 4.6 13 9.2l2.6 9.4" fill="none" ${SB(ink)}/><path d="M12 2.2v2.6M9.8 3l1 1.6M14.2 3l-1 1.6" ${SB(fill,1.4)}/>`],
+ ["화살잔",(ink,fill)=>`<path d="M6.4 5h11.2L12 12.8z" fill="${fill}"/><path d="M12 12.8v6M9 21.4h6" ${SB(ink)}/>`],
+ ["각하트잔",(ink,fill)=>`<path d="M12 13.6 6.8 8.4V4.8h4L12 6l1.2-1.2h4v3.6z" fill="${fill}"/><path d="M12 13.6v4.2M9 21h6" ${SB(ink)}/>`],
+ ["더블다이아",(ink,fill)=>`<path d="M9.2 5.2 13.6 9.6 9.2 14 4.8 9.6z" fill="none" ${SB(ink)}/><path d="M14.8 10 19.2 14.4 14.8 18.8 10.4 14.4z" fill="none" ${SB(fill)}/>`],
+ ["블레이드H",(ink,fill)=>`<path d="M7.2 3.6 9.4 3.6 8.2 20.4 6 20.4z" fill="${ink}"/><path d="M14.6 3.6 16.8 3.6 15.6 20.4 13.4 20.4z" fill="${ink}"/><path d="M8.4 10.6l6.6.9-.2 2.2-6.6-.9z" fill="${fill}"/>`]];
+function sharpSym(i){
+  const t=(i/10|0)%8, v=i%10;
+  const fx={tilt:v===6,frame:(v===3)?1:(v===8)?3:0};
+  const core=SSYM[t][1](INK,PINK)+((v===2||v===7)?SEXTRA[2][1](PINK):``);
+  return {svg:wrapSharp(core,fx),name:[SSYM[t][0],(v===2||v===7)?"각별":"",sfxName(fx)].filter(Boolean).join(" · ")};
+}
+function sharpTypo(i){
+  const G=["홍","술","HS","ㅎㅅ"], g=i%4, s=(i/4|0)%5, v=i%100;
+  const fx={tilt:false,frame:(v%9===4)?1:(v%13===7)?2:0};
+  const inv=fx.frame===2; const ink=inv?DARK:INK, fill=inv?"#fff":PINK;
+  const glyph=G[g];
+  const fs=glyph.length>1?11:13.5;
+  let core="", nm=glyph+" ";
+  if(s===0){ nm+="이탤릭"; core=`<text x="12" y="16.6" text-anchor="middle" font-size="${fs}" font-weight="900" fill="${ink}" font-family="inherit" transform="skewX(-10)" transform-origin="12 12">${glyph}</text><path d="M6.4 19.6 17.6 19.6 16.6 21.4 5.4 21.4z" fill="${fill}"/>`; }
+  else if(s===1){ nm+="블레이드밑줄"; core=`<text x="12" y="15.4" text-anchor="middle" font-size="${fs}" font-weight="900" fill="${ink}" font-family="inherit">${glyph}</text><path d="M6 18.2h12l-1.6 2.6H7.6z" fill="${fill}"/>`; }
+  else if(s===2){ nm+="쉐브론"; core=`<path d="M6.2 5 2.8 12l3.4 7" ${SB(fill,1.5)} fill="none"/><path d="M17.8 5 21.2 12l-3.4 7" ${SB(fill,1.5)} fill="none"/><text x="12" y="16" text-anchor="middle" font-size="${glyph.length>1?9.5:11.5}" font-weight="900" fill="${ink}" font-family="inherit">${glyph}</text>`; }
+  else if(s===3){ nm+="다이아박스"; core=`<rect x="5" y="5" width="14" height="14" ${SB(fill,1.3)} fill="none" transform="rotate(45 12 12)"/><text x="12" y="15.4" text-anchor="middle" font-size="${glyph.length>1?7.5:9.5}" font-weight="900" fill="${ink}" font-family="inherit">${glyph}</text>`; }
+  else { nm+="컷아웃"; core=`<path d="M4 4h16v11l-3.4 5H4z" fill="${fill}"/><text x="11.4" y="15.6" text-anchor="middle" font-size="${glyph.length>1?8.5:10.5}" font-weight="900" fill="${inv?PINK:DARK}" font-family="inherit">${glyph}</text>`; }
+  return {svg:wrapSharp(core,fx),name:[nm,sfxName(fx)].filter(Boolean).join(" · ")};
+}
+function sharpRemix(i){
+  const style=i%4;
+  const c=sharpCore((i/4|0)+7,INK,PINK);
+  let svg, nm, cls="";
+  if(style===0){ svg=c.core; nm="네온"; cls="fx-neon"; }
+  else if(style===1){
+    const p=sharpCore((i/4|0)+7,PINK,PINK), w=sharpCore((i/4|0)+7,INK,PINK);
+    svg=`<g opacity=".5" transform="translate(-1.2 .6)">${p.core}</g>${w.core}`; nm="글리치";
+  }
+  else if(style===2){
+    svg=`<path d="M1.5 20 20 1.5M4.5 22.5 22.5 4.5" ${SB(PINK,.8)} opacity=".4"/>${c.core}`; nm="슬래시BG";
+  }
+  else {
+    const p=sharpCore((i/4|0)+7,PINK,"none");
+    svg=`<g transform="translate(1.1 1.1) scale(.92)" opacity=".55">${p.core}</g>${c.core}`; nm="더블에지";
+  }
+  const fx={tilt:i%15===8,frame:0};
+  return {svg:wrapSharp(svg,fx),name:[c.name,nm,sfxName(fx)].filter(Boolean).join(" · "),cls};
+}
+
+/* ========== 청키 솔리드 (1001–1300) — 굵은 획·솔리드 돔 (No.481~ 스타일) ========== */
+const CS=(c,w)=>`stroke="${c}" stroke-width="${w||2.3}" stroke-linecap="round" stroke-linejoin="round"`;
+const CBARS=[["싱글바",ink=>`<path d="M6.2 6h11.6" ${CS(ink)}/>`],
+ ["더블바",ink=>`<path d="M9.2 3h5.6M6.2 6.2h11.6" ${CS(ink,2.1)}/>`],
+ ["틱바",ink=>`<path d="M9.8 3.4h4.4M6.2 6.2h11.6" ${CS(ink,2.1)}/>`],
+ ["민바",ink=>``]];
+const CBOWLS=[
+ ["반달돔",(ink,fl)=>`<path d="M7.2 7.5a4.8 4.8 0 0 0 9.6 0z" fill="${fl}"/>`],
+ ["풀문",(ink,fl)=>`<circle cx="12" cy="10.8" r="4.4" fill="${fl}"/>`],
+ ["물결돔",(ink,fl)=>`<path d="M7.2 8.1c1.6-.9 3.2.5 4.8.5 1.6 0 3.2-1.3 4.8-.5a4.8 4.8 0 0 1-9.6 0z" fill="${fl}"/>`],
+ ["와이드사발",(ink,fl)=>`<path d="M6.1 7.5a5.9 5.9 0 0 0 11.8 0z" fill="${fl}"/>`],
+ ["콘",(ink,fl)=>`<path d="M7.2 7.5h9.6L12 13.8z" fill="${fl}"/>`]];
+const CLEGS=[
+ ["스템베이스",ink=>`<path d="M12 12.6v5.4M8.6 20.6h6.8" ${CS(ink)}/>`],
+ ["와이드베이스",ink=>`<path d="M12 12.6v5.2M7.4 20.6h9.2" ${CS(ink)}/>`],
+ ["V다리",ink=>`<path d="M12 12.6 9 20.6M12 12.6l3 8" ${CS(ink,2.1)}/>`],
+ ["미니스템",ink=>`<path d="M12 12.6v4.2" ${CS(ink)}/><circle cx="12" cy="19.6" r="1.5" fill="${ink}"/>`]];
+const CACC=[["",()=>``],
+ ["빨대",fl=>`<path d="M13.8 8.8 18 3.2" ${CS(fl,1.7)}/>`],
+ ["버블",fl=>`<circle cx="17.6" cy="2.7" r="1.05" fill="${fl}"/><circle cx="19.4" cy="4.9" r=".65" fill="${fl}"/>`],
+ ["미니문",fl=>`<circle cx="18.9" cy="3.3" r="1.8" fill="${fl}"/>`],
+ ["체리",fl=>`<circle cx="17.3" cy="4.5" r="1.2" fill="${fl}"/><path d="M17.3 3.3c.4-.9.9-1.3 1.8-1.6" ${CS(fl,1)} fill="none"/>`]];
+function chunkyMark(i){
+  const bar=i%4, bowl=(i/4|0)%5, leg=(i/20|0)%4, acc=(i*3+1)%5;
+  const fx={tilt:i%13===8,frame:(i%9===4)?2:(i%11===7)?1:0};
+  const inv=fx.frame===2;
+  const ink=inv?DARK:INK, fl=inv?"#fff":PINK;
+  let core=CBARS[bar][1](ink)+CBOWLS[bowl][1](ink,fl)+CLEGS[leg][1](ink)+CACC[acc][1](fl);
+  if(fx.tilt) core=`<g transform="rotate(-9 12 12)">${core}</g>`;
+  if(fx.frame===1) core=`<circle cx="12" cy="12" r="11" ${CS(PINK,1)} fill="none"/><g transform="translate(2.6 2.6) scale(.78)">${core}</g>`;
+  if(fx.frame===2) core=`<circle cx="12" cy="12" r="11" fill="${PINK}"/><g transform="translate(2.6 2.6) scale(.78)">${core}</g>`;
+  const name=[CBARS[bar][0],CBOWLS[bowl][0],CLEGS[leg][0],CACC[acc][0],(fx.tilt?"기울임":""),(fx.frame===1?"링":fx.frame===2?"원배지":"")].filter(Boolean).join(" · ");
+  return {svg:core,name};
+}
+
+/* ---------- 렌더 ---------- */
+const SECTIONS=[
+ ["ㅎㅅ 리가처",180,ligMark],
+ ["잔",80,cupMark],
+ ["병",80,botMark],
+ ["문자·도장",80,textMark],
+ ["추상",80,absMark],
+ ["샤프 ㅎㅅ",100,sharpLig],
+ ["블레이드 잔",80,bladeCup],
+ ["샤프 심볼",80,sharpSym],
+ ["타이포 샤프",100,sharpTypo],
+ ["샤프 리믹스",140,sharpRemix],
+ ["청키 솔리드 ★",300,chunkyMark]];
+const root=document.getElementById("root");
+let no=0; const all=[]; const secEls=[];
+for(const [title,count,fn] of SECTIONS){
+  const wrap=document.createElement("div"); root.appendChild(wrap); secEls.push(wrap);
+  const h=document.createElement("div"); h.className="sec"; h.innerHTML=title+`<small>${no+1}–${no+count}</small>`; wrap.appendChild(h);
+  const g=document.createElement("div"); g.className="grid"; wrap.appendChild(g);
+  for(let k=0;k<count;k++){
+    const m=fn(k); const idx=no++; all.push(m);
+    const c=document.createElement("div"); c.className="cell";
+    c.innerHTML=`<svg class="${m.cls||""}" viewBox="0 0 24 24" fill="none">${m.svg}</svg><b>${idx+1}</b>`;
+    c.addEventListener("click",()=>{
+      document.getElementById("modal").innerHTML=`<svg class="${m.cls||""}" viewBox="0 0 24 24" fill="none">${m.svg}</svg><div class="no">No.${idx+1}</div><div class="nm">${title} · ${m.name}</div><div class="tip">이 번호를 채팅으로 알려주시면 앱에 적용돼요</div>`;
+      document.getElementById("scrim").classList.add("on");
+    });
+    g.appendChild(c);
+  }
+}
+document.getElementById("scrim").addEventListener("click",e=>{ if(e.target.id==="scrim") e.target.classList.remove("on"); });
+
+/* 계열 칩 필터: 탭하면 그 계열만, 다시 탭하면 전체 */
+const chips=[...document.querySelectorAll(".fam span")];
+let curFilter=-1;
+function applyFilter(idx){
+  curFilter=(curFilter===idx)?-1:idx;
+  secEls.forEach((el,k)=>{ el.style.display=(curFilter===-1||k===curFilter)?"":"none"; });
+  chips.forEach((ch,k)=>{ ch.style.background=(k===curFilter)?"var(--accent)":""; ch.style.color=(k===curFilter)?"#fff":""; });
+  window.scrollTo(0,0);
+}
+chips.forEach((ch,k)=>{ ch.style.cursor="pointer"; ch.addEventListener("click",()=>applyFilter(k)); });
+if(location.hash==="#chunky") applyFilter(SECTIONS.length-1);
+</script>

@@ -557,7 +557,11 @@
   .auth-top{display:flex;align-items:center;padding:calc(18px + env(safe-area-inset-top)) 22px 4px;}
   .auth-top .ttl{font-size:15px;font-weight:800;}
   .auth-x{margin-left:auto;border:0;background:none;color:var(--ink-soft);font-size:17px;padding:6px;}
-  .auth-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 24px;}
+  .auth-body{flex:1;display:flex;flex-direction:column;justify-content:flex-start;
+    overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    padding:8px 24px calc(28px + env(safe-area-inset-bottom));}
+  .auth-body>h2{margin-top:auto;}
+  .auth-body>.soc{margin-bottom:auto;}
   .auth-body h2{margin:0 0 6px;font-size:25px;font-weight:800;letter-spacing:-.5px;}
   .auth-body .asub{color:var(--ink-soft);font-size:13.5px;margin-bottom:24px;}
   .field{margin-bottom:11px;}
@@ -1058,7 +1062,7 @@ function renderHome(){
   const q=state.q.toLowerCase();
   if(q){
     const r=DATA.filter(d=>(d.name+d.cat).toLowerCase().includes(q)).sort((a,b)=>b.rating-a.rating);
-    $("#s-home").innerHTML = `<div class="sec-h"><h2>‘${state.q}’ 검색결과</h2><span class="more">${r.length}</span></div>
+    $("#s-home").innerHTML = `<div class="sec-h"><h2>‘${esc(state.q)}’ 검색결과</h2><span class="more">${r.length}</span></div>
       <div class="list">${r.length?r.map(d=>cardHTML(d)).join(""):`<div class="empty">검색 결과가 없어요</div>`}</div>`;
     return;
   }
@@ -1110,10 +1114,10 @@ function renderHome(){
     </button>
     <div class="sec-h"><h2>지금 수다방</h2><span class="more" data-goto="comm">전체 →</span></div>
     ${COMM.slice().sort((a,b)=>b.likes-a.likes).slice(0,3).map(p=>`<button class="mini-post" data-goto="comm">
-      <div class="pav">${p.who[0]}</div><span class="mtxt"><b style="color:var(--ink)">${p.who}</b> · ${p.text.split("\n")[0]}</span><span class="mlk">♥ ${p.likes}</span>
+      <div class="pav">${p.who[0]}</div><span class="mtxt"><b style="color:var(--ink)">${esc(p.who)}</b> · ${esc(p.text.split("\n")[0])}</span><span class="mlk">♥ ${p.likes}</span>
     </button>`).join("")}
     ${shelves}
-    <div class="hero" style="background-color:#170a10;background-image:linear-gradient(155deg,rgba(28,10,18,.68),rgba(13,8,10,.94)),url('${top.photo}');background-size:cover;background-position:center;">
+    <div class="hero" style="background-color:#170a10;${top.photo?`background-image:linear-gradient(155deg,rgba(28,10,18,.68),rgba(13,8,10,.94)),url('${top.photo}');background-size:cover;background-position:center;`:''}">
       <div class="eyebrow">오늘의 한 잔</div>
       <h1 class="serif">${top.name}</h1>
       <p class="hp">${top.cat} · ★ ${top.rating.toFixed(1)} · ${gradeText[top.addGrade]}</p>
@@ -1214,8 +1218,8 @@ function renderMy(){
   $("#s-my").innerHTML = `
     <div class="profile-card">
       <div class="k">MY PROFILE</div>
-      <h3 class="serif">${me.av} ${me.nick}${me.guest?" (게스트)":""}</h3>
-      <p class="pd">${me.email}</p>
+      <h3 class="serif">${esc(me.av)} ${esc(me.nick)}${me.guest?" (게스트)":""}</h3>
+      <p class="pd">${esc(me.email)}</p>
       <span class="lvl">${lvl[0]} ${lvl[1]} · 활동 ${myPosts+myCmts}</span>
       <div class="pstats">
         <div class="pstat"><b>${saved.length}</b><span>찜한 술</span></div>
@@ -1307,6 +1311,15 @@ const DB={
   setSession(s){ try{ s?localStorage.setItem("hs_session",JSON.stringify(s)):localStorage.removeItem("hs_session"); }catch(_){} },
 };
 function hash(s){ let h=5381; for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))>>>0; return "h"+h.toString(36); }
+/* HTML 이스케이프 — 모든 사용자/원격 문자열 보간에 사용 */
+const ESCMAP={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"};
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>ESCMAP[c]); }
+function safeUrl(u){ return /^https:\/\//i.test(u||"")?String(u):""; }
+/* 사용자별 데이터(찜·취향) 영구 저장 */
+DB.key=function(){ return "hs_data_"+(me&&me.email?me.email:"guest"); };
+DB.saveData=function(){ try{ localStorage.setItem(DB.key(),JSON.stringify({saved:[...state.saved],profile:state.profile,prefs:[...state.prefs]})); }catch(_){} };
+DB.loadData=function(){ try{ const d=JSON.parse(localStorage.getItem(DB.key())||"{}");
+  state.saved=new Set(d.saved||[]); state.profile=d.profile||null; state.prefs=new Set(d.prefs||[]); }catch(_){} };
 /* 데모 계정 시드 — hongsul@hongsul.kr / hongsul1234 */
 const DEMO={email:"hongsul@hongsul.kr",pw:"hongsul1234",nick:"주인장",av:"🍷"};
 (function(){ const u=DB.users();
@@ -1316,7 +1329,9 @@ const DEMO={email:"hongsul@hongsul.kr",pw:"hongsul1234",nick:"주인장",av:"�
   }
 })();
 let me=DB.session();
-let authMode="login", authAvatar=AVATARS[0];
+DB.loadData();
+let authMode="login", authAvatar=AVATARS[0], pendingTab=null;
+function afterAuth(){ DB.loadData(); state.tab=pendingTab||"my"; pendingTab=null; renderTab(); }
 function openAuth(mode){ authMode=mode||"login"; $("#auth").classList.remove("hide"); paintAuth(); }
 function closeAuth(){ $("#auth").classList.add("hide"); }
 function paintAuth(){
@@ -1354,29 +1369,29 @@ function doAuth(){
     if(users.some(u=>u.email===email)){ setBad("#f-email",true); $("#f-email .err").textContent="이미 가입된 이메일이에요"; return; }
     const u={email,nick,av:authAvatar,pw:hash(pw),joined:Date.now()};
     users.push(u); DB.saveUsers(users);
-    me={email,nick,av:authAvatar}; DB.setSession(me); closeAuth(); state.tab="my"; renderTab();
+    me={email,nick,av:authAvatar}; DB.setSession(me); closeAuth(); afterAuth();
     toast(`환영해요, ${nick}님! 🥂`);
   }else{
     const u=users.find(x=>x.email===email);
     if(!u||u.pw!==hash(pw)){ setBad("#f-pw",true); $("#f-pw .err").textContent="이메일 또는 비밀번호가 맞지 않아요"; return; }
-    me={email:u.email,nick:u.nick,av:u.av}; DB.setSession(me); closeAuth(); state.tab="my"; renderTab();
+    me={email:u.email,nick:u.nick,av:u.av}; DB.setSession(me); closeAuth(); afterAuth();
     toast(`${u.nick}님, 반가워요!`);
   }
 }
-function logout(){ me=null; DB.setSession(null); state.tab="my"; renderTab(); toast("로그아웃 되었어요"); }
-function requireLogin(msg){ if(me) return true; toast(msg||"로그인이 필요해요"); openAuth("login"); return false; }
+function logout(){ DB.saveData(); me=null; DB.setSession(null); DB.loadData(); state.tab="my"; renderTab(); toast("로그아웃 되었어요"); }
+function requireLogin(msg){ if(me) return true; pendingTab=state.tab; toast(msg||"로그인이 필요해요"); openAuth("login"); return false; }
 $("#authX").addEventListener("click",closeAuth);
 document.addEventListener("click",e=>{
   const am=e.target.closest("[data-authmode]"); if(am){ authMode=am.dataset.authmode; paintAuth(); return; }
-  const av=e.target.closest("[data-av]"); if(av){ authAvatar=av.dataset.av; paintAuth(); return; }
+  const av=e.target.closest("[data-av]"); if(av){ authAvatar=av.dataset.av; av.parentNode.querySelectorAll("[data-av]").forEach(b=>b.classList.toggle("on",b===av)); return; }
   const sb=e.target.closest("#a-submit"); if(sb){ doAuth(); return; }
   const so=e.target.closest("[data-social]");
   if(so){ const kind=so.dataset.social;
     if(kind==="게스트"){ me={email:"guest@hongsul",nick:"게스트",av:"🍶",guest:true}; }
     else { me={email:"kakao@hongsul",nick:"카카오회원",av:"🍷"}; }
-    DB.setSession(me); closeAuth(); state.tab="my"; renderTab(); toast(`${me.nick}으로 시작해요`); return; }
+    DB.setSession(me); closeAuth(); afterAuth(); toast(`${me.nick}으로 시작해요`); return; }
   const dm2=e.target.closest("[data-demo]");
-  if(dm2){ me={email:DEMO.email,nick:DEMO.nick,av:DEMO.av}; DB.setSession(me); closeAuth(); state.tab="my"; renderTab(); toast(`${DEMO.nick}님, 반가워요! 🥂`); return; }
+  if(dm2){ me={email:DEMO.email,nick:DEMO.nick,av:DEMO.av}; DB.setSession(me); closeAuth(); afterAuth(); toast(`${DEMO.nick}님, 반가워요! 🥂`); return; }
   const lo=e.target.closest("[data-logout]"); if(lo){ logout(); return; }
   const li=e.target.closest("[data-login]"); if(li){ openAuth(li.dataset.login||"login"); return; }
 });
@@ -1408,7 +1423,7 @@ function paintCheckin(){
   $("#sheet").innerHTML=`<div class="grab"></div>
     <div class="ci-head">
       <div class="ci-bottle">${d.photo?`<img src="${d.photo}" alt="">`:`<span class="mono serif">${d.name.trim()[0]}</span>`}</div>
-      <div><div class="cn">${d.name}</div><div class="cc">${d.cat} · ${d.abv}% · 지금 마시는 중</div></div>
+      <div><div class="cn">${esc(d.name)}</div><div class="cc">${d.cat} · ${d.abv}% · 지금 마시는 중</div></div>
     </div>
     <div class="fbox">
       <div class="stars" id="ciStars">${[1,2,3,4,5].map(n=>`<span data-cirate="${n}" class="${n<=ciRate?'on':''}">${n<=ciRate?'★':'☆'}</span>`).join("")}</div>
@@ -1458,42 +1473,71 @@ document.addEventListener("change",e=>{
 });
 
 /* ============ 근처 술집 (실시간 위치 + OpenStreetMap) ============ */
-const near={loading:false,error:null,items:[],pos:null,filter:"전체",asked:false};
+const near={loading:false,error:null,items:[],pos:null,filter:"전체",placeName:null};
+const SPOTS=[["강남",37.4979,127.0276],["홍대",37.5563,126.9236],["이태원",37.5345,126.9946],["종로",37.5704,126.9921],["건대",37.5403,127.0700],["서면",35.1579,129.0594],["부산 해운대",35.1587,129.1604]];
 const NEAR_FILTERS=[["전체",""],["술집·바","bar"],["펍","pub"],["주류판매점","alcohol"],["식당","restaurant"]];
 const KIND_KO={bar:"술집·바",pub:"펍",alcohol:"주류판매점",restaurant:"식당",nightclub:"클럽",biergarten:"비어가든",wine:"와인샵"};
 function kmDist(a,b,c,d){ const R=6371,r=Math.PI/180;
   const x=(c-a)*r, y=(d-b)*r, s=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;
   return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s)); }
 function fmtDist(km){ return km<1?`${Math.round(km*1000)}m`:`${km.toFixed(1)}km`; }
-async function loadNear(){
+const OVERPASS=["https://overpass.private.coffee/api/interpreter",
+                "https://overpass-api.de/api/interpreter",
+                "https://overpass.kumi.systems/api/interpreter"];
+function getPos(){
+  return new Promise((res,rej)=>{
+    if(!navigator.geolocation||!window.isSecureContext) return rej({code:"nogeo"});
+    navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true,timeout:15000,maximumAge:120000});
+  });
+}
+async function overpass(q){
+  let last=null;
+  for(const url of OVERPASS){
+    try{
+      const ctl=new AbortController(); const to=setTimeout(()=>ctl.abort(),20000);
+      const res=await fetch(url,{method:"POST",signal:ctl.signal,
+        headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:"data="+encodeURIComponent(q)});
+      clearTimeout(to);
+      if(res.status===429||res.status===504){ last="busy"; continue; }
+      if(!res.ok){ last="fail"; continue; }
+      return await res.json();
+    }catch(_){ last="fail"; }
+  }
+  throw {code:last||"fail"};
+}
+async function loadNear(manual){
   if(near.loading) return;
   near.loading=true; near.error=null; renderNear();
   try{
-    const pos=await new Promise((res,rej)=>{
-      if(!navigator.geolocation) return rej(new Error("nogeo"));
-      navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
-    });
-    const lat=pos.coords.latitude, lon=pos.coords.longitude;
+    let lat,lon;
+    if(manual){ lat=manual.lat; lon=manual.lon; near.placeName=manual.name; }
+    else{
+      const pos=await getPos();
+      lat=pos.coords.latitude; lon=pos.coords.longitude; near.placeName=null;
+    }
     near.pos={lat,lon};
-    const R=1200;
-    const q=`[out:json][timeout:25];(
+    const R=1500;
+    const q=`[out:json][timeout:20];(
       node["amenity"~"^(bar|pub|nightclub|biergarten)$"](around:${R},${lat},${lon});
+      way["amenity"~"^(bar|pub)$"](around:${R},${lat},${lon});
       node["shop"~"^(alcohol|wine)$"](around:${R},${lat},${lon});
-      node["amenity"="restaurant"]["cuisine"~"korean|izakaya|japanese"](around:${R},${lat},${lon});
-    );out body 60;`;
-    const res=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",body:"data="+encodeURIComponent(q)});
-    if(!res.ok) throw new Error("overpass "+res.status);
-    const data=await res.json();
+    );out center 80;`;
+    const data=await overpass(q);
     near.items=(data.elements||[]).filter(e=>e.tags&&e.tags.name).map(e=>{
       const t=e.tags, kind=t.amenity||t.shop||"bar";
+      const la=e.lat!=null?e.lat:(e.center&&e.center.lat), lo=e.lon!=null?e.lon:(e.center&&e.center.lon);
+      if(la==null||lo==null) return null;
       return {id:e.id,name:t.name,kind,kindKo:KIND_KO[kind]||kind,
         addr:[t["addr:city"],t["addr:street"],t["addr:housenumber"]].filter(Boolean).join(" ")||t["addr:full"]||"",
         phone:t.phone||t["contact:phone"]||"", hours:t.opening_hours||"",
-        lat:e.lat,lon:e.lon,dist:kmDist(lat,lon,e.lat,e.lon)};
-    }).sort((a,b)=>a.dist-b.dist);
+        lat:la,lon:lo,dist:kmDist(lat,lon,la,lo)};
+    }).filter(Boolean).sort((a,b)=>a.dist-b.dist);
     if(!near.items.length) near.error="empty";
   }catch(err){
-    near.error=(err&&(err.code===1))?"denied":(err&&err.message==="nogeo")?"nogeo":"fail";
+    const c=err&&err.code;
+    near.error = c===1?"denied" : c===3?"timeout" : c==="nogeo"?"nogeo" : c==="busy"?"busy" : c===2?"unavail" : "fail";
+    if(near.error!=="empty") near.pos=null;
   }
   near.loading=false; renderNear();
 }
@@ -1503,24 +1547,31 @@ function renderNear(){
     const f=NEAR_FILTERS.find(v=>v[0]===near.filter);
     return f&&(x.kind===f[1]||(f[1]==="alcohol"&&x.kind==="wine"));
   });
-  const msg={denied:["위치 권한이 필요해요","브라우저 주소창의 자물쇠 → 위치 권한을 '허용'으로 바꾼 뒤 다시 시도해주세요"],
-    nogeo:["위치를 쓸 수 없는 환경이에요","HTTPS 주소에서 열어주세요"],
-    empty:["주변 1.2km에 등록된 곳이 없어요","OpenStreetMap에 등록된 가게만 표시돼요"],
-    fail:["정보를 불러오지 못했어요","잠시 후 다시 시도해주세요"]}[near.error];
+  const msg={
+    denied:["위치 권한이 꺼져 있어요","주소창 왼쪽 자물쇠🔒 → 위치 → '허용'으로 바꾸고 다시 시도해주세요"],
+    timeout:["위치를 찾는 데 실패했어요","실내이거나 GPS가 약한 환경일 수 있어요. 아래에서 지역을 직접 골라보세요"],
+    unavail:["기기에서 위치를 가져올 수 없어요","PC는 위치가 부정확할 수 있어요. 아래에서 지역을 골라보세요"],
+    nogeo:["이 브라우저에선 위치를 쓸 수 없어요","https 주소로 접속하거나 아래에서 지역을 골라주세요"],
+    busy:["지도 서버가 혼잡해요","무료 서버라 가끔 붐벼요. 30초 뒤 다시 시도해주세요"],
+    empty:["주변 1.5km에 등록된 곳이 없어요","OpenStreetMap에 등록된 가게만 나와요. 다른 지역을 골라보세요"],
+    fail:["정보를 불러오지 못했어요","네트워크를 확인하고 다시 시도해주세요"]}[near.error];
+  const cities=`<div class="mhint" style="text-align:center;margin:14px 0 8px">또는 지역으로 둘러보기</div>
+    <div class="tabs" style="justify-content:center;flex-wrap:wrap;padding-top:0">
+      ${SPOTS.map(s=>`<button class="chip" data-nearspot="${s[0]}">${s[0]}</button>`).join("")}</div>`;
   el.innerHTML=`
-    <div class="match-hd"><h2>근처 술집</h2><p>${near.pos?`내 위치 기준 1.2km · ${near.items.length}곳`:"내 주변의 술집·바·주류샵을 찾아드려요"}</p></div>
+    <div class="match-hd"><h2>근처 술집</h2><p>${near.pos?`${near.placeName||"내 위치"} 기준 1.5km · ${near.items.length}곳`:"내 주변의 술집·바·주류샵을 찾아드려요"}</p></div>
     <div class="tabs">${NEAR_FILTERS.map(([n])=>`<button class="chip ${near.filter===n?'on':''}" data-nearf="${n}">${n}</button>`).join("")}</div>
-    ${!near.pos&&!near.loading&&!near.error?`<div style="padding:16px 20px"><button class="auth-btn" data-nearload>📍 내 위치로 찾기</button>
-      <div class="mhint" style="text-align:center;margin-top:10px">위치 정보는 검색에만 쓰이고 저장되지 않아요</div></div>`:''}
+    ${!near.pos&&!near.loading&&!near.error?`<div style="padding:16px 20px 0"><button class="auth-btn" data-nearload>📍 내 위치로 찾기</button>
+      <div class="mhint" style="text-align:center;margin-top:10px">위치 정보는 검색에만 쓰이고 저장되지 않아요</div></div>${cities}`:''}
     ${near.loading?`<div class="list">${Array.from({length:5},()=>`<div class="sk"><div class="ska shimmer"></div><div class="skb"><div class="skl shimmer"></div><div class="skl2 shimmer"></div></div></div>`).join("")}</div>`:''}
-    ${msg?`<div class="empty"><b style="color:var(--ink)">${msg[0]}</b><br><span style="font-size:12px">${msg[1]}</span><br><br><button class="chip on" data-nearload>다시 시도</button></div>`:''}
+    ${msg?`<div class="empty" style="padding-bottom:10px"><b style="color:var(--ink)">${msg[0]}</b><br><span style="font-size:12px">${msg[1]}</span><br><br><button class="chip on" data-nearload>다시 시도</button></div>${cities}`:''}
     ${!near.loading&&list.length?`<div class="list">${list.map(p=>`
       <div class="card" data-nearopen="${p.id}" role="button" tabindex="0">
         <div class="bottle"><span class="mono serif">${p.kind==="alcohol"||p.kind==="wine"?"🍾":p.kind==="pub"?"🍺":p.kind==="restaurant"?"🍲":"🍸"}</span></div>
         <div class="info">
-          <div class="cat">${p.kindKo}${p.hours?` · ${p.hours.slice(0,18)}`:""}</div>
-          <div class="name">${p.name}</div>
-          <div class="metrics"><span class="pill g-good">${fmtDist(p.dist)}</span>${p.addr?`<span class="pill">${p.addr.slice(0,20)}</span>`:''}${p.phone?`<span class="pill">☎</span>`:''}</div>
+          <div class="cat">${p.kindKo}${p.hours?` · ${esc(p.hours.slice(0,18))}`:""}</div>
+          <div class="name">${esc(p.name)}</div>
+          <div class="metrics"><span class="pill g-good">${fmtDist(p.dist)}</span>${p.addr?`<span class="pill">${esc(p.addr.slice(0,20))}</span>`:''}${p.phone?`<span class="pill">☎</span>`:''}</div>
         </div>
       </div>`).join("")}</div>`:''}
     ${near.pos&&!near.loading?`<div class="foot"><div class="fwarn">데이터 © OpenStreetMap 기여자 · 실제 영업 여부는 다를 수 있어요. 음주 후 운전은 절대 금지입니다.</div></div>`:''}`;
@@ -1528,14 +1579,16 @@ function renderNear(){
 document.addEventListener("click",e=>{
   const nl=e.target.closest("[data-nearload]"); if(nl){ loadNear(); return; }
   const nf=e.target.closest("[data-nearf]"); if(nf){ near.filter=nf.dataset.nearf; renderNear(); return; }
+  const ns=e.target.closest("[data-nearspot]");
+  if(ns){ const s=SPOTS.find(x=>x[0]===ns.dataset.nearspot); if(s) loadNear({name:s[0],lat:s[1],lon:s[2]}); return; }
   const no=e.target.closest("[data-nearopen]");
   if(no){ const p=near.items.find(x=>String(x.id)===no.dataset.nearopen); if(!p) return;
     $("#sheet").innerHTML=`<div class="grab"></div>
-      <div class="msheet-h"><h2>${p.name}</h2><p>${p.kindKo} · 내 위치에서 ${fmtDist(p.dist)}</p></div>
+      <div class="msheet-h"><h2>${esc(p.name)}</h2><p>${p.kindKo} · 내 위치에서 ${fmtDist(p.dist)}</p></div>
       <div class="block">
-        ${p.addr?`<div class="ing"><span class="nm">주소</span><span class="role">${p.addr}</span></div>`:''}
-        ${p.hours?`<div class="ing"><span class="nm">영업시간</span><span class="role">${p.hours}</span></div>`:''}
-        ${p.phone?`<div class="ing"><span class="nm">전화</span><span class="role">${p.phone}</span></div>`:''}
+        ${p.addr?`<div class="ing"><span class="nm">주소</span><span class="role">${esc(p.addr)}</span></div>`:''}
+        ${p.hours?`<div class="ing"><span class="nm">영업시간</span><span class="role">${esc(p.hours)}</span></div>`:''}
+        ${p.phone?`<div class="ing"><span class="nm">전화</span><span class="role">${esc(p.phone)}</span></div>`:''}
         <div class="ing"><span class="nm">거리</span><span class="role">${fmtDist(p.dist)}</span></div>
       </div>
       <div class="d-actions">
@@ -1570,8 +1623,8 @@ function openMy(kind){
     mysheet(`<div class="msheet-h"><h2>프로필 수정</h2><p>수다방에서 보이는 정보예요</p></div>
       <div class="fbox">
         <div class="field"><label>프로필 이모지</label><div class="avatars">${AVATARS.map(a=>`<button data-eav="${a}" class="${a===me.av?'on':''}">${a}</button>`).join("")}</div></div>
-        <div class="field" id="f-enick"><label>닉네임</label><input id="e-nick" value="${me.nick}" maxlength="12"><div class="err">2자 이상 입력해주세요</div></div>
-        <div class="field"><label>이메일 (변경 불가)</label><input value="${me.email}" disabled style="opacity:.55"></div>
+        <div class="field" id="f-enick"><label>닉네임</label><input id="e-nick" value="${esc(me.nick)}" maxlength="12"><div class="err">2자 이상 입력해주세요</div></div>
+        <div class="field"><label>이메일 (변경 불가)</label><input value="${esc(me.email)}" disabled style="opacity:.55"></div>
         <button class="auth-btn" data-saveprofile>저장하기</button>
       </div><div style="height:30px"></div>`);
   }
@@ -1595,8 +1648,8 @@ function openMy(kind){
     const joined=u&&u.joined?new Date(u.joined).toLocaleDateString("ko-KR"):"–";
     mysheet(`<div class="msheet-h"><h2>개인정보 관리</h2><p>홍술이 보관 중인 내 정보예요</p></div>
       <div class="block"><h4>수집된 정보</h4>
-        <div class="ing"><span class="nm">이메일</span><span class="role">${me.email}</span></div>
-        <div class="ing"><span class="nm">닉네임</span><span class="role">${me.nick}</span></div>
+        <div class="ing"><span class="nm">이메일</span><span class="role">${esc(me.email)}</span></div>
+        <div class="ing"><span class="nm">닉네임</span><span class="role">${esc(me.nick)}</span></div>
         <div class="ing"><span class="nm">프로필</span><span class="role">${me.av}</span></div>
         <div class="ing"><span class="nm">가입일</span><span class="role">${joined}</span></div>
         <div class="ing"><span class="nm">찜한 술</span><span class="role">${state.saved.size}개</span></div>
@@ -1647,14 +1700,14 @@ function openMy(kind){
       <div class="block" style="margin-bottom:26px">${CHECKINS.length?CHECKINS.slice(0,20).map(c=>{
         const d=DATA.find(x=>x.name===c.drink);
         return `<div class="ci-row"><div class="cim">${c.photo?`<img src="${c.photo}" alt="">`:d&&d.photo?`<img src="${d.photo}" alt="">`:'🍷'}</div>
-          <div class="cit"><b>${c.drink}</b><span>${c.mood?c.mood+" · ":""}${new Date(c.at).toLocaleDateString("ko-KR")}${c.text?" · "+c.text.slice(0,18):""}</span></div>
+          <div class="cit"><b>${esc(c.drink)}</b><span>${c.mood?c.mood+" · ":""}${new Date(c.at).toLocaleDateString("ko-KR")}${c.text?" · "+c.text.slice(0,18):""}</span></div>
           <div class="cis">${"★".repeat(c.rate)}</div></div>`;}).join("")
         :`<div class="empty" style="padding:26px">아직 기록이 없어요.<br>술 상세에서 <b style="color:var(--accent)">🍻 마셨어요</b>를 눌러보세요</div>`}</div>`);
   }
   else if(kind==="activity"){
     const mine=COMM.filter(x=>me&&x.who===me.nick);
     mysheet(`<div class="msheet-h"><h2>활동 내역</h2><p>내가 남긴 흔적들</p></div>
-      ${mine.length?`<div class="sec-h" style="padding-top:8px"><h2 style="font-size:14px">내가 쓴 글</h2></div>${mine.map(postHTML).join("")}`:''}
+      ${mine.length?`<div class="sec-h" style="padding-top:8px"><h2 style="font-size:14px">내가 쓴 글</h2></div>${mine.map(p=>postHTML(p,true)).join("")}`:''}
       <div class="block" style="margin-bottom:26px"><h4>최근 활동</h4>
         ${ACTS.map(([i,t,d])=>`<div class="actlog"><span class="ai">${i}</span><span class="at">${t}</span><span class="ad">${d}</span></div>`).join("")}</div>`);
   }
@@ -1718,12 +1771,12 @@ document.addEventListener("click",e=>{
   const om=t.closest("[data-openmy]"); if(om){ openMy(om.dataset.openmy); return; }
   const tg=t.closest("[data-toggle]"); if(tg){ const k=tg.dataset.toggle; settings[k]=!settings[k]; saveSettings(); renderMy();
     toast(settings[k]?"켜졌어요":"꺼졌어요"); return; }
-  const ea=t.closest("[data-eav]"); if(ea){ me.av=ea.dataset.eav; DB.setSession(me); openMy("profile"); return; }
+  const ea=t.closest("[data-eav]"); if(ea){ me.av=ea.dataset.eav; ea.parentNode.querySelectorAll("[data-eav]").forEach(b=>b.classList.toggle("on",b===ea)); return; }
   const sp=t.closest("[data-saveprofile]");
   if(sp){ const nk=($("#e-nick").value||"").trim();
     if(nk.length<2){ $("#f-enick").classList.add("bad"); return; }
     const users=DB.users(); const u=users.find(x=>x.email===me.email); if(u){ u.nick=nk; u.av=me.av; DB.saveUsers(users); }
-    me.nick=nk; DB.setSession(me); closeSheet(); renderMy(); toast("프로필이 수정되었어요"); return; }
+    const old=me.nick; COMM.forEach(x=>{ if(x.who===old) x.who=nk; x.cmts.forEach(cm=>{ if(cm[0]===old) cm[0]=nk; }); }); me.nick=nk; DB.setSession(me); closeSheet(); renderMy(); toast("프로필이 수정되었어요"); return; }
   const spw=t.closest("[data-savepw]");
   if(spw){ const cur=$("#pw-cur").value||"", nw=$("#pw-new").value||"", nw2=$("#pw-new2").value||"";
     const users=DB.users(), u=users.find(x=>x.email===me.email);
@@ -1751,8 +1804,8 @@ document.addEventListener("click",e=>{
     return; }
   const clr=t.closest("[data-clearsaved]");
   if(clr){ if(!state.saved.size){ toast("찜한 술이 없어요"); return; }
-    state.saved=new Set(); closeSheet(); renderMy(); toast("찜 목록을 모두 삭제했어요"); return; }
-  const it=t.closest("[data-inqtype]"); if(it){ inqType=it.dataset.inqtype; openMy("contact"); return; }
+    state.saved=new Set(); DB.saveData(); closeSheet(); renderMy(); toast("찜 목록을 모두 삭제했어요"); return; }
+  const it=t.closest("[data-inqtype]"); if(it){ inqType=it.dataset.inqtype; it.parentNode.querySelectorAll(".tchip").forEach(cq=>cq.classList.toggle("on",cq===it)); return; }
   const si=t.closest("[data-sendinq]");
   if(si){ const v=($("#inqText").value||"").trim();
     if(v.length<5){ toast("내용을 5자 이상 적어주세요"); return; }
@@ -1808,6 +1861,12 @@ const COMM=[
   put(2,[47]); put(5,[9]); put(7,[48]); put(12,[5]); put(13,[12,11]);
 })();
 let commCh="전체", commSort="hot", commOpen=new Set(), composerDrink=null, composerType="talk", cmtDrink={}, composerMedia=[];
+let composerText="", cmtDraft={};
+document.addEventListener("input",e=>{
+  const t=e.target; if(!t) return;
+  if(t.id==="postInput") composerText=t.value;
+  else if(t.classList&&t.classList.contains("ci-in")) cmtDraft[+t.dataset.cid]=t.value;
+});
 const MAX_MEDIA=4, MAX_MB=12;
 function mediaHTML(list){
   if(!list||!list.length) return "";
@@ -1850,23 +1909,23 @@ function voteHTML(p){
     <div class="vtotal">${t.toLocaleString()}명 참여${v?'':' · 눌러서 투표'}</div>
   </div>`;
 }
-function postHTML(p){
+function postHTML(p,ro){
   const hot=p.likes>=30;
   return `<div class="post">
-    <div class="phead"><div class="pav">${p.who[0]}</div><span class="pwho">${p.who}</span>${typeBadge(p)}${hot?`<span class="tbdg hot">HOT</span>`:''}<span class="ptime">${p.time}</span></div>
-    <div class="ptext">${p.text}</div>
+    <div class="phead"><div class="pav">${esc((p.who||"?")[0])}</div><span class="pwho">${esc(p.who)}</span>${typeBadge(p)}${hot?`<span class="tbdg hot">HOT</span>`:''}<span class="ptime">${esc(p.time)}</span></div>
+    <div class="ptext">${esc(p.text)}</div>
     ${mediaHTML(p.media)}
-    ${p.drink?`<button class="pdrink" data-drinkname="${p.drink}"><b>◎</b> ${p.drink}</button>`:''}
+    ${p.drink?`<button class="pdrink" data-drinkname="${esc(p.drink)}"><b>◎</b> ${esc(p.drink)}</button>`:''}
     ${p.vote?voteHTML(p):''}
-    <div class="pacts">
+    ${ro?'':`<div class="pacts">
       <button class="pact ${p.liked?'liked':''}" data-like="${p.id}">${p.liked?'♥':'♡'} 공감 ${p.likes}</button>
       <button class="pact" data-cmt="${p.id}">💬 댓글 ${p.cmts.length}</button>
       ${p.type==="ask"?`<button class="pact reco" data-recodrink="${p.id}">◎ 술 추천하기</button>`:''}
-    </div>
-    ${commOpen.has(p.id)?`<div class="cmts">
-      ${p.cmts.map(c=>`<div class="cmt"><b>${c[0]}</b><span>${c[1]}${c[2]?`<button class="cchip" data-drinkname="${c[2]}">◎ ${c[2]}</button>`:''}</span></div>`).join("")||`<div class="cmt"><span style="color:var(--ink-soft)">첫 댓글을 남겨보세요</span></div>`}
+    </div>`}
+    ${!ro&&commOpen.has(p.id)?`<div class="cmts">
+      ${p.cmts.map(c=>`<div class="cmt"><b>${esc(c[0])}</b><span>${esc(c[1])}${c[2]?`<button class="cchip" data-drinkname="${esc(c[2])}">◎ ${esc(c[2])}</button>`:''}</span></div>`).join("")||`<div class="cmt"><span style="color:var(--ink-soft)">첫 댓글을 남겨보세요</span></div>`}
       ${cmtDrink[p.id]?`<div class="cattach">추천할 술: <b>${cmtDrink[p.id]}</b><button data-clearcd="${p.id}">✕</button></div>`:''}
-      <div class="cmt-row"><input id="ci-${p.id}" placeholder="${p.type==='ask'?'추천 이유를 적어주세요':'댓글 달기'}" maxlength="120"><button class="cpk" data-pickcmt="${p.id}">◎</button><button data-cmtadd="${p.id}">등록</button></div>
+      <div class="cmt-row"><input class="ci-in" data-cid="${p.id}" value="${esc(cmtDraft[p.id]||'')}" placeholder="${p.type==='ask'?'추천 이유를 적어주세요':'댓글 달기'}" maxlength="120"><button class="cpk" data-pickcmt="${p.id}">◎</button><button data-cmtadd="${p.id}">등록</button></div>
     </div>`:''}
   </div>`;
 }
@@ -1889,7 +1948,7 @@ function renderComm(){
       ${composerMedia.length?`<div class="mprev">${composerMedia.map((m,i)=>`<div class="mp">${m.kind==="video"?`<video src="${m.src}" muted playsinline preload="metadata"></video>`:`<img src="${m.src}" alt="">`}<button data-delmedia="${i}">✕</button></div>`).join("")}</div>
       <div class="mhint">${composerMedia.length}/${MAX_MEDIA} · 사진·영상 ${MAX_MB}MB 이하</div>`:''}
       <div class="composer" style="margin:8px 0 0">
-        <input id="postInput" placeholder="${composerType==='ask'?'어떤 술을 찾고 있나요?':composerType==='review'?'마신 술 솔직 후기를 남겨주세요':'술 이야기를 나눠보세요'}" maxlength="200">
+        <input id="postInput" value="${esc(composerText)}" placeholder="${composerType==='ask'?'어떤 술을 찾고 있나요?':composerType==='review'?'마신 술 솔직 후기를 남겨주세요':'술 이야기를 나눠보세요'}" maxlength="200">
         <button data-postadd>올리기</button>
       </div>
     </div>
@@ -1942,10 +2001,13 @@ document.addEventListener("click",e=>{
   if(cs){ commSort=cs.dataset.commsort; renderComm(); return; }
   const ca=t.closest("[data-cmtadd]");
   if(ca){ if(!requireLogin("댓글을 남기려면 로그인이 필요해요")) return;
-    const id=+ca.dataset.cmtadd; const inp=$("#ci-"+id); const v=(inp&&inp.value.trim())||"";
+    const id=+ca.dataset.cmtadd;
+    const box=ca.closest(".cmts"); const inp=box&&box.querySelector(".ci-in");
+    const v=((inp&&inp.value)||cmtDraft[id]||"").trim();
     const dk=cmtDrink[id]||null;
     if(!v&&!dk){ toast("댓글을 입력해주세요"); return; }
-    const p=COMM.find(x=>x.id===id); p.cmts.push([me.nick,v||"이거 추천해요!",dk]); delete cmtDrink[id];
+    const p=COMM.find(x=>x.id===id); if(!p) return;
+    p.cmts.push([me.nick,v||"이거 추천해요!",dk]); delete cmtDrink[id]; delete cmtDraft[id];
     renderComm(); toast(dk?"술 추천을 남겼어요 ◎":"댓글을 남겼어요"); return; }
   const pm=t.closest("[data-pickmedia]");
   if(pm){ if(!requireLogin("사진·영상을 올리려면 로그인이 필요해요")) return;
@@ -1954,12 +2016,12 @@ document.addEventListener("click",e=>{
   if(dm){ composerMedia.splice(+dm.dataset.delmedia,1); renderComm(); return; }
   const pa=t.closest("[data-postadd]");
   if(pa){ if(!requireLogin("글을 쓰려면 로그인이 필요해요")) return;
-    const inp=$("#postInput"); const v=(inp&&inp.value.trim())||"";
+    const inp=$("#postInput"); const v=((inp&&inp.value)||composerText||"").trim();
     if(!v&&!composerMedia.length){ toast("내용을 입력해주세요"); return; }
     const chan=composerType==="ask"?"추천구함":composerType==="review"?"리뷰":"혼술";
-    COMM.unshift({ id:Date.now(), type:composerType, chan, who:me.nick, time:"방금 전", text:v, drink:composerDrink,
+    COMM.unshift({ id:Date.now(), type:composerType, chan, who:me.nick, uid:me.email, time:"방금 전", text:v, drink:composerDrink,
       media:composerMedia.slice(), likes:0, liked:false, cmts:[] });
-    composerDrink=null; composerMedia=[]; renderComm(); toast(composerType==="ask"?"추천 요청을 올렸어요! 답이 달릴 거예요":"게시글을 올렸어요"); return; }
+    composerDrink=null; composerMedia=[]; composerText=""; renderComm(); toast(composerType==="ask"?"추천 요청을 올렸어요! 답이 달릴 거예요":"게시글을 올렸어요"); return; }
   const dn=t.closest("[data-drinkname]");
   if(dn){ const d=DATA.find(x=>x.name===dn.dataset.drinkname); if(d) openSheet(d); return; }
 });
@@ -2033,6 +2095,7 @@ function closeSheet(){ $("#scrim").classList.remove("open"); $("#sheet").classLi
 function toggleSave(id, silent){ id=+id;
   if(state.saved.has(id)){ state.saved.delete(id); !silent&&toast("술장에서 뺐어요"); }
   else { state.saved.add(id); !silent&&toast("내 술장에 담았어요"); }
+  DB.saveData();
   renderTab(); if($("#sheet").classList.contains("open")) openSheet(byId(id)); }
 
 /* ============ DISPATCH ============ */
@@ -2055,7 +2118,7 @@ document.addEventListener("click",e=>{
     let r=DATA.filter(c.filter).sort((a,b)=>b.rating-a.rating);
     $("#s-rank").innerHTML=`<div class="sec-h" style="padding-top:22px"><h2>${c.t}</h2><span class="more">${r.length}</span></div><div class="list">${r.map((d,i)=>cardHTML(d,i+1)).join("")}</div>`; return; }
   if(cat){ state.cat=cat.dataset.cat; state.tab="rank"; renderTab(); return; }
-  if(pref){ const k=pref.dataset.pref; state.prefs.has(k)?state.prefs.delete(k):state.prefs.add(k); renderMatch(); return; }
+  if(pref){ const k=pref.dataset.pref; state.prefs.has(k)?state.prefs.delete(k):state.prefs.add(k); DB.saveData(); renderMatch(); return; }
   if(goto){ state.tab=goto.dataset.goto; renderTab(); return; }
   if(retest){ startOnb(); return; }
 });
@@ -2093,7 +2156,7 @@ function finishOnb(){ const first=quizAns[0]||"crisp";
   state.prefs=new Set(); if(["sweet","dry","body","crisp"].includes(first)) state.prefs.add(first);
   if(quizAns[1]==="soft") state.prefs.add("soft");
   if(quizAns[2]==="clean") state.prefs.add("clean"); if(quizAns[2]==="cleanadd") state.prefs.add("cleanadd"); if(quizAns[2]==="aroma") state.prefs.add("aroma");
-  $("#onb").classList.add("hide"); state.tab="home"; renderTab(); toast(`취향 진단 완료 · ${state.profile.name}`); }
+  DB.saveData(); $("#onb").classList.add("hide"); state.tab="home"; renderTab(); toast(`취향 진단 완료 · ${state.profile.name}`); }
 
 /* ============ 월드 · Open Food Facts 실시간 연동 ============ */
 const world={cat:'',q:'',page:1,items:[],loading:false,done:false,error:false,started:false};
@@ -2113,8 +2176,8 @@ function worldCard(p){
   const brand=(p.brands||'').split(',')[0].trim();
   const alc=offAbv(p), g=additiveGrade(p);
   return `<button class="card" data-wopen="${p.code}">
-    <div class="bottle">${img?`<img src="${img}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}<span class="mono serif">${(name||'?').trim()[0]}</span></div>
-    <div class="info"><div class="cat">${brand||'—'}</div><div class="name">${name}</div>
+    <div class="bottle">${img?`<img src="${safeUrl(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}<span class="mono serif">${esc((name||'?').trim()[0])}</span></div>
+    <div class="info"><div class="cat">${esc(brand)||'—'}</div><div class="name">${esc(name)}</div>
       <div class="metrics">${alc?`<span class="pill">${alc}%</span>`:''}${g.k!=='unknown'?`<span class="pill g-${g.k}">첨가물 ${g.label}</span>`:''}</div></div>
   </button>`;
 }
@@ -2164,18 +2227,18 @@ function openWorldSheet(p){
   $("#sheet").innerHTML=`
     <div class="grab"></div>
     <div class="d-hero">
-      <div class="d-bottle">${img?`<img src="${img}" alt="" onerror="this.remove()">`:''}<span class="mono serif">${name.trim()[0]}</span></div>
-      <div class="d-title"><div class="cat">${brand||'—'}${country?' · '+country:''}</div>
-        <div class="name serif">${name}</div>
-        <div class="d-rating"><span class="cnt">Open Food Facts · ${p.code}</span></div></div>
+      <div class="d-bottle">${img?`<img src="${safeUrl(img)}" alt="" onerror="this.remove()">`:''}<span class="mono serif">${name.trim()[0]}</span></div>
+      <div class="d-title"><div class="cat">${esc(brand)||'—'}${country?' · '+esc(country):''}</div>
+        <div class="name serif">${esc(name)}</div>
+        <div class="d-rating"><span class="cnt">Open Food Facts · ${esc(p.code)}</span></div></div>
     </div>
     <div class="d-meta">
       <div class="m"><b>${alc?alc+'%':'—'}</b><span>도수</span></div>
-      <div class="m"><b>${p.quantity||'—'}</b><span>용량</span></div>
+      <div class="m"><b>${esc(p.quantity)||'—'}</b><span>용량</span></div>
       <div class="m"><b style="color:var(--${gc})">${g.label}</b><span>첨가물</span></div>
     </div>
-    <div class="block"><h4>원재료</h4><p class="desc">${ing||'원재료 정보가 아직 등록되지 않았어요.'}</p></div>
-    ${adds.length?`<div class="block"><h4>첨가물 ${adds.length}종</h4><div class="pairs">${adds.map(a=>`<div class="pair">${a}</div>`).join("")}</div></div>`:''}
+    <div class="block"><h4>원재료</h4><p class="desc">${esc(ing)||'원재료 정보가 아직 등록되지 않았어요.'}</p></div>
+    ${adds.length?`<div class="block"><h4>첨가물 ${adds.length}종</h4><div class="pairs">${adds.map(a=>`<div class="pair">${esc(a)}</div>`).join("")}</div></div>`:''}
     <div class="block" style="margin-bottom:24px"><p class="desc" style="font-size:12px;color:var(--ink-soft)">Open Food Facts 오픈 데이터 · 사용자 기여로 채워져 일부 항목이 비어 있을 수 있어요.</p></div>`;
   $("#scrim").classList.add("open"); $("#sheet").classList.add("open"); $("#sheet").scrollTop=0;
 }

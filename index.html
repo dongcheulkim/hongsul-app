@@ -286,7 +286,9 @@
     align-items:center;justify-content:center;gap:3px;font-size:10px;padding-top:4px;transition:color .15s;position:relative;}
   .nav button.on{color:var(--ink);font-weight:700;}
   .nav button.on svg{color:var(--accent);}
-  .nav svg{width:21px;height:21px;}
+  .nav svg{width:20px;height:20px;}
+  .nav button{font-size:9.5px;letter-spacing:-.2px;}
+  @media (max-width:380px){ .nav svg{width:18px;height:18px;} .nav button{font-size:9px;} }
   .nav .fab{gap:2px;overflow:visible;}
   .fabc{width:52px;height:52px;border-radius:50%;background:var(--accent);display:grid;place-items:center;
     margin-top:-24px;border:4px solid var(--ground);
@@ -469,6 +471,46 @@
   .actlog .at{flex:1;color:var(--ink-2);line-height:1.5;}
   .actlog .at b{color:var(--ink);}
   .actlog .ad{flex:none;font-size:10.5px;color:var(--ink-soft);}
+
+  /* ===== check-in ===== */
+  .btn-checkin{flex:1;border:0;background:var(--surface-3);color:var(--ink);border-radius:13px;
+    font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;
+    transition:transform .1s ease-out;}
+  .btn-checkin:active{transform:scale(.97);}
+  .btn-checkin.done{background:var(--accent-soft);color:var(--accent);}
+  .ci-head{display:flex;gap:14px;align-items:center;padding:18px 20px 14px;}
+  .ci-bottle{flex:none;width:64px;height:64px;border-radius:15px;background:var(--surface-2);
+    position:relative;overflow:hidden;display:grid;place-items:center;}
+  .ci-bottle img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .ci-head .cn{font-size:17px;font-weight:800;letter-spacing:-.3px;}
+  .ci-head .cc{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .stars{display:flex;justify-content:center;gap:6px;font-size:34px;color:var(--surface-3);margin:6px 0 4px;}
+  .stars span{cursor:pointer;transition:transform .1s;}
+  .stars span:active{transform:scale(1.15);}
+  .stars span.on{color:#E3B15C;}
+  .cimsg{text-align:center;font-size:12.5px;color:var(--ink-soft);min-height:18px;margin-bottom:14px;}
+  .cimood{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:14px;}
+  .cimood button{border:1px solid var(--hair);background:var(--surface);color:var(--ink-2);
+    border-radius:18px;padding:8px 13px;font-size:12.5px;font-weight:600;transition:.15s;}
+  .cimood button.on{background:var(--accent-soft);color:var(--accent);border-color:transparent;}
+  .ci-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-soft);color:var(--accent);
+    border-radius:20px;padding:4px 11px;font-size:11px;font-weight:800;}
+  .badges{display:flex;gap:9px;flex-wrap:wrap;padding:0 20px;}
+  .bdg{flex:1 1 calc(33% - 6px);min-width:92px;background:var(--surface);border:1px solid var(--hair);
+    border-radius:14px;padding:13px 8px;text-align:center;}
+  .bdg.locked{opacity:.4;}
+  .bdg .be{font-size:24px;display:block;}
+  .bdg .bn{font-size:11px;font-weight:700;margin-top:5px;}
+  .bdg .bd{font-size:9.5px;color:var(--ink-soft);margin-top:2px;}
+  .ci-row{display:flex;align-items:center;gap:11px;padding:12px 0;border-top:1px solid var(--hair);}
+  .ci-row:first-of-type{border-top:0;}
+  .ci-row .cim{flex:none;width:38px;height:38px;border-radius:11px;background:var(--surface-2);
+    position:relative;overflow:hidden;display:grid;place-items:center;font-size:15px;}
+  .ci-row .cim img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .ci-row .cit{flex:1;min-width:0;}
+  .ci-row .cit b{font-size:13px;font-weight:700;display:block;}
+  .ci-row .cit span{font-size:11px;color:var(--ink-soft);}
+  .ci-row .cis{flex:none;font-size:11.5px;color:#E3B15C;font-weight:700;}
   .ctypes{display:flex;gap:6px;flex-wrap:wrap;}
   .tchip{border:1px solid var(--hair);background:var(--surface);color:var(--ink-2);padding:6px 11px;
     border-radius:16px;font-size:11.5px;font-weight:600;transition:.15s;}
@@ -635,6 +677,7 @@
   <div class="screen" id="s-cure"></div>
   <div class="screen" id="s-world"></div>
   <div class="screen" id="s-comm"></div>
+  <div class="screen" id="s-near"></div>
 </div>
 
 <div class="nav" id="nav">
@@ -645,6 +688,7 @@
   <button data-tab="cure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9h13v5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M17 10h2a2 2 0 0 1 0 4h-2"/><path d="M8 3v2.5M12 3v2.5"/></svg>해장</button>
   <button data-tab="world"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>월드</button>
   <button data-tab="comm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12a8 8 0 0 1-8 8H4l2.3-2.7A8 8 0 1 1 21 12z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>수다</button>
+  <button data-tab="near"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>근처</button>
 </div>
 
 <div class="scrim" id="scrim"></div>
@@ -1164,6 +1208,8 @@ function renderMy(){
     ver:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.4 2.4 4.6-4.8"/></svg>',
     key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3.5M15.5 12v2.5"/></svg>',
     down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M7.5 10.5 12 15l4.5-4.5M4 20h16"/></svg>',
+    beer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z"/><path d="M15 10h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M7 8a2 2 0 1 1 2.6-2.7 2.2 2.2 0 0 1 3.9.7A1.8 1.8 0 0 1 14 8"/></svg>',
+    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>',
   };
   const row=(icon,label,val,act,cls)=>`<button class="mrow ${cls||''}" ${act}><span class="mi">${icon}</span><span class="mlabel">${label}</span>${val?`<span class="mval">${val}</span>`:''}<span class="marrow">›</span></button>`;
   const swrow=(icon,label,key)=>`<button class="mrow" data-toggle="${key}"><span class="mi">${icon}</span><span class="mlabel">${label}</span><span class="sw ${settings[key]?'on':''}"><i></i></span></button>`;
@@ -1191,6 +1237,7 @@ function renderMy(){
       ${row(I.key,"비밀번호 변경","",'data-openmy="password"')}
       ${row(I.shield,"개인정보 관리","",'data-openmy="privinfo"')}
       ${row(I.star,"취향 진단",p?p.name:"미진단",'data-retest')}
+      ${row(I.beer,"내 술 기록 · 뱃지",`체크인 ${CHECKINS.length} · 뱃지 ${BADGES.filter(b=>b.t(CHECKINS)).length}`,'data-openmy="checkins"')}
       ${row(I.act,"활동 내역",`글 ${myPosts} · 댓글 ${myCmts}`,'data-openmy="activity"')}
       ${row(I.bell,"알림함","1",'data-openmy="noti"')}
     </div>
@@ -1330,6 +1377,170 @@ document.addEventListener("click",e=>{
   const li=e.target.closest("[data-login]"); if(li){ openAuth(li.dataset.login||"login"); return; }
 });
 
+/* ============ 체크인 (Untappd 스타일) ============ */
+let CHECKINS=(function(){ try{ return JSON.parse(localStorage.getItem("hs_checkins")||"[]"); }catch(_){ return []; } })();
+function saveCheckins(){ try{ localStorage.setItem("hs_checkins",JSON.stringify(CHECKINS)); }catch(_){} }
+const MOODS=["혼술","친구랑","회식","데이트","집에서","가게에서"];
+const RATEMSG=["","별로였어요","그저 그래요","괜찮아요","맛있어요!","인생술이에요 🥂"];
+const BADGES=[
+  {e:"🌱",n:"첫 잔",d:"체크인 1회",t:c=>c.length>=1},
+  {e:"🔥",n:"단골",d:"체크인 5회",t:c=>c.length>=5},
+  {e:"🏆",n:"애주가",d:"체크인 20회",t:c=>c.length>=20},
+  {e:"🌏",n:"탐험가",d:"5종류 도전",t:c=>new Set(c.map(x=>x.cat)).size>=5},
+  {e:"🥃",n:"위스키러버",d:"위스키 3잔",t:c=>c.filter(x=>x.cat==="위스키").length>=3},
+  {e:"🏺",n:"전통주지킴이",d:"전통주 3잔",t:c=>c.filter(x=>x.cat==="전통주").length>=3},
+  {e:"⭐",n:"평론가",d:"5점 준 술 3개",t:c=>c.filter(x=>x.rate===5).length>=3},
+  {e:"📷",n:"기록가",d:"사진 3장",t:c=>c.filter(x=>x.photo).length>=3},
+  {e:"🌙",n:"달밤의 술",d:"체크인 10회",t:c=>c.length>=10},
+];
+let ciDrink=null, ciRate=0, ciMood=null, ciPhoto=null;
+function openCheckin(d){
+  ciDrink=d; ciRate=0; ciMood=null; ciPhoto=null;
+  paintCheckin();
+  $("#scrim").classList.add("open"); $("#sheet").classList.add("open"); $("#sheet").scrollTop=0;
+}
+function paintCheckin(){
+  const d=ciDrink; if(!d) return;
+  $("#sheet").innerHTML=`<div class="grab"></div>
+    <div class="ci-head">
+      <div class="ci-bottle">${d.photo?`<img src="${d.photo}" alt="">`:`<span class="mono serif">${d.name.trim()[0]}</span>`}</div>
+      <div><div class="cn">${d.name}</div><div class="cc">${d.cat} · ${d.abv}% · 지금 마시는 중</div></div>
+    </div>
+    <div class="fbox">
+      <div class="stars" id="ciStars">${[1,2,3,4,5].map(n=>`<span data-cirate="${n}" class="${n<=ciRate?'on':''}">${n<=ciRate?'★':'☆'}</span>`).join("")}</div>
+      <div class="cimsg">${RATEMSG[ciRate]||"별점을 눌러주세요"}</div>
+      <div class="cimood">${MOODS.map(m=>`<button data-cimood="${m}" class="${m===ciMood?'on':''}">${m}</button>`).join("")}</div>
+      <div class="field"><textarea class="ta" id="ciText" style="min-height:88px" placeholder="한 줄 남기기 (선택)"></textarea></div>
+      <input type="file" id="ciFile" accept="image/*" style="display:none">
+      ${ciPhoto?`<div class="mprev"><div class="mp"><img src="${ciPhoto}" alt=""><button data-cidelphoto>✕</button></div></div>`:''}
+      <button class="tchip media" data-cipick style="width:100%;padding:12px;margin:4px 0 12px">📷 사진 추가</button>
+      <button class="auth-btn" data-cisubmit style="margin-top:0">체크인 하기</button>
+      <div class="mhint" style="text-align:center;margin-top:10px">체크인하면 수다방에 기록이 올라가요</div>
+    </div><div style="height:30px"></div>`;
+}
+function doCheckin(){
+  if(!requireLogin("체크인하려면 로그인이 필요해요")) return;
+  if(!ciRate){ toast("별점을 선택해주세요"); return; }
+  const d=ciDrink, txt=($("#ciText")&&$("#ciText").value.trim())||"";
+  const before=BADGES.filter(b=>b.t(CHECKINS)).length;
+  const rec={id:Date.now(),drink:d.name,cat:d.cat,rate:ciRate,mood:ciMood,text:txt,photo:ciPhoto,at:Date.now()};
+  CHECKINS.unshift(rec); saveCheckins();
+  const after=BADGES.filter(b=>b.t(CHECKINS));
+  COMM.unshift({id:Date.now()+1,type:"checkin",chan:"체크인",who:me.nick,time:"방금 전",
+    text:`${"★".repeat(ciRate)}${"☆".repeat(5-ciRate)} ${d.name}${ciMood?` · ${ciMood}`:""}${txt?`\n${txt}`:""}`,
+    drink:d.name, media:ciPhoto?[{kind:"image",src:ciPhoto}]:null, likes:0, liked:false, cmts:[]});
+  closeSheet();
+  const newB=after.length>before?after[after.length-1]:null;
+  toast(newB?`체크인 완료! ${newB.e} "${newB.n}" 뱃지 획득 🎉`:`체크인 완료! ${"★".repeat(ciRate)}`);
+  state.tab="comm"; renderTab();
+}
+document.addEventListener("click",e=>{
+  const t=e.target;
+  const ck=t.closest("[data-checkin]");
+  if(ck){ const d=byId(+ck.dataset.checkin); if(d){ if(!requireLogin("체크인하려면 로그인이 필요해요")) return; openCheckin(d); } return; }
+  const cr=t.closest("[data-cirate]"); if(cr){ ciRate=+cr.dataset.cirate; paintCheckin(); return; }
+  const cmo=t.closest("[data-cimood]"); if(cmo){ ciMood=ciMood===cmo.dataset.cimood?null:cmo.dataset.cimood; paintCheckin(); return; }
+  const cp=t.closest("[data-cipick]"); if(cp){ const f=$("#ciFile"); if(f) f.click(); return; }
+  const cdp=t.closest("[data-cidelphoto]"); if(cdp){ ciPhoto=null; paintCheckin(); return; }
+  const cs3=t.closest("[data-cisubmit]"); if(cs3){ doCheckin(); return; }
+});
+document.addEventListener("change",e=>{
+  if(e.target&&e.target.id==="ciFile"&&e.target.files[0]){
+    const f=e.target.files[0];
+    if(f.size>MAX_MB*1024*1024){ toast(`${MAX_MB}MB 이하만 올릴 수 있어요`); return; }
+    const r=new FileReader(); r.onload=()=>{ ciPhoto=r.result; paintCheckin(); }; r.readAsDataURL(f);
+    e.target.value="";
+  }
+});
+
+/* ============ 근처 술집 (실시간 위치 + OpenStreetMap) ============ */
+const near={loading:false,error:null,items:[],pos:null,filter:"전체",asked:false};
+const NEAR_FILTERS=[["전체",""],["술집·바","bar"],["펍","pub"],["주류판매점","alcohol"],["식당","restaurant"]];
+const KIND_KO={bar:"술집·바",pub:"펍",alcohol:"주류판매점",restaurant:"식당",nightclub:"클럽",biergarten:"비어가든",wine:"와인샵"};
+function kmDist(a,b,c,d){ const R=6371,r=Math.PI/180;
+  const x=(c-a)*r, y=(d-b)*r, s=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;
+  return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s)); }
+function fmtDist(km){ return km<1?`${Math.round(km*1000)}m`:`${km.toFixed(1)}km`; }
+async function loadNear(){
+  if(near.loading) return;
+  near.loading=true; near.error=null; renderNear();
+  try{
+    const pos=await new Promise((res,rej)=>{
+      if(!navigator.geolocation) return rej(new Error("nogeo"));
+      navigator.geolocation.getCurrentPosition(res,rej,{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+    });
+    const lat=pos.coords.latitude, lon=pos.coords.longitude;
+    near.pos={lat,lon};
+    const R=1200;
+    const q=`[out:json][timeout:25];(
+      node["amenity"~"^(bar|pub|nightclub|biergarten)$"](around:${R},${lat},${lon});
+      node["shop"~"^(alcohol|wine)$"](around:${R},${lat},${lon});
+      node["amenity"="restaurant"]["cuisine"~"korean|izakaya|japanese"](around:${R},${lat},${lon});
+    );out body 60;`;
+    const res=await fetch("https://overpass-api.de/api/interpreter",{method:"POST",body:"data="+encodeURIComponent(q)});
+    if(!res.ok) throw new Error("overpass "+res.status);
+    const data=await res.json();
+    near.items=(data.elements||[]).filter(e=>e.tags&&e.tags.name).map(e=>{
+      const t=e.tags, kind=t.amenity||t.shop||"bar";
+      return {id:e.id,name:t.name,kind,kindKo:KIND_KO[kind]||kind,
+        addr:[t["addr:city"],t["addr:street"],t["addr:housenumber"]].filter(Boolean).join(" ")||t["addr:full"]||"",
+        phone:t.phone||t["contact:phone"]||"", hours:t.opening_hours||"",
+        lat:e.lat,lon:e.lon,dist:kmDist(lat,lon,e.lat,e.lon)};
+    }).sort((a,b)=>a.dist-b.dist);
+    if(!near.items.length) near.error="empty";
+  }catch(err){
+    near.error=(err&&(err.code===1))?"denied":(err&&err.message==="nogeo")?"nogeo":"fail";
+  }
+  near.loading=false; renderNear();
+}
+function renderNear(){
+  const el=$("#s-near"); if(!el) return;
+  const list=near.filter==="전체"?near.items:near.items.filter(x=>{
+    const f=NEAR_FILTERS.find(v=>v[0]===near.filter);
+    return f&&(x.kind===f[1]||(f[1]==="alcohol"&&x.kind==="wine"));
+  });
+  const msg={denied:["위치 권한이 필요해요","브라우저 주소창의 자물쇠 → 위치 권한을 '허용'으로 바꾼 뒤 다시 시도해주세요"],
+    nogeo:["위치를 쓸 수 없는 환경이에요","HTTPS 주소에서 열어주세요"],
+    empty:["주변 1.2km에 등록된 곳이 없어요","OpenStreetMap에 등록된 가게만 표시돼요"],
+    fail:["정보를 불러오지 못했어요","잠시 후 다시 시도해주세요"]}[near.error];
+  el.innerHTML=`
+    <div class="match-hd"><h2>근처 술집</h2><p>${near.pos?`내 위치 기준 1.2km · ${near.items.length}곳`:"내 주변의 술집·바·주류샵을 찾아드려요"}</p></div>
+    <div class="tabs">${NEAR_FILTERS.map(([n])=>`<button class="chip ${near.filter===n?'on':''}" data-nearf="${n}">${n}</button>`).join("")}</div>
+    ${!near.pos&&!near.loading&&!near.error?`<div style="padding:16px 20px"><button class="auth-btn" data-nearload>📍 내 위치로 찾기</button>
+      <div class="mhint" style="text-align:center;margin-top:10px">위치 정보는 검색에만 쓰이고 저장되지 않아요</div></div>`:''}
+    ${near.loading?`<div class="list">${Array.from({length:5},()=>`<div class="sk"><div class="ska shimmer"></div><div class="skb"><div class="skl shimmer"></div><div class="skl2 shimmer"></div></div></div>`).join("")}</div>`:''}
+    ${msg?`<div class="empty"><b style="color:var(--ink)">${msg[0]}</b><br><span style="font-size:12px">${msg[1]}</span><br><br><button class="chip on" data-nearload>다시 시도</button></div>`:''}
+    ${!near.loading&&list.length?`<div class="list">${list.map(p=>`
+      <div class="card" data-nearopen="${p.id}" role="button" tabindex="0">
+        <div class="bottle"><span class="mono serif">${p.kind==="alcohol"||p.kind==="wine"?"🍾":p.kind==="pub"?"🍺":p.kind==="restaurant"?"🍲":"🍸"}</span></div>
+        <div class="info">
+          <div class="cat">${p.kindKo}${p.hours?` · ${p.hours.slice(0,18)}`:""}</div>
+          <div class="name">${p.name}</div>
+          <div class="metrics"><span class="pill g-good">${fmtDist(p.dist)}</span>${p.addr?`<span class="pill">${p.addr.slice(0,20)}</span>`:''}${p.phone?`<span class="pill">☎</span>`:''}</div>
+        </div>
+      </div>`).join("")}</div>`:''}
+    ${near.pos&&!near.loading?`<div class="foot"><div class="fwarn">데이터 © OpenStreetMap 기여자 · 실제 영업 여부는 다를 수 있어요. 음주 후 운전은 절대 금지입니다.</div></div>`:''}`;
+}
+document.addEventListener("click",e=>{
+  const nl=e.target.closest("[data-nearload]"); if(nl){ loadNear(); return; }
+  const nf=e.target.closest("[data-nearf]"); if(nf){ near.filter=nf.dataset.nearf; renderNear(); return; }
+  const no=e.target.closest("[data-nearopen]");
+  if(no){ const p=near.items.find(x=>String(x.id)===no.dataset.nearopen); if(!p) return;
+    $("#sheet").innerHTML=`<div class="grab"></div>
+      <div class="msheet-h"><h2>${p.name}</h2><p>${p.kindKo} · 내 위치에서 ${fmtDist(p.dist)}</p></div>
+      <div class="block">
+        ${p.addr?`<div class="ing"><span class="nm">주소</span><span class="role">${p.addr}</span></div>`:''}
+        ${p.hours?`<div class="ing"><span class="nm">영업시간</span><span class="role">${p.hours}</span></div>`:''}
+        ${p.phone?`<div class="ing"><span class="nm">전화</span><span class="role">${p.phone}</span></div>`:''}
+        <div class="ing"><span class="nm">거리</span><span class="role">${fmtDist(p.dist)}</span></div>
+      </div>
+      <div class="d-actions">
+        ${p.phone?`<a class="btn-save" href="tel:${p.phone.replace(/[^0-9+]/g,'')}" style="display:grid;place-items:center;text-decoration:none">☎</a>`:''}
+        <a class="btn-primary" style="display:grid;place-items:center;text-decoration:none" href="https://map.kakao.com/link/to/${encodeURIComponent(p.name)},${p.lat},${p.lon}" target="_blank" rel="noopener">길찾기 →</a>
+      </div>`;
+    $("#scrim").classList.add("open"); $("#sheet").classList.add("open"); $("#sheet").scrollTop=0; return; }
+});
+
 /* ============ 마이페이지 서브화면 ============ */
 let settings=(function(){ try{ return Object.assign({push:true,publicAct:true,adult:true},JSON.parse(localStorage.getItem("hs_settings")||"{}")); }catch(_){ return {push:true,publicAct:true,adult:true}; } })();
 function saveSettings(){ try{ localStorage.setItem("hs_settings",JSON.stringify(settings)); }catch(_){} }
@@ -1413,6 +1624,28 @@ function openMy(kind){
   else if(kind==="notice"){
     mysheet(`<div class="msheet-h"><h2>공지사항</h2></div>
       <div class="block" style="margin-bottom:26px">${NOTICES.map(([t,d,b])=>`<div class="faq"><div class="q"><b>·</b>${t}</div><div class="a" style="padding-left:19px"><span style="color:var(--ink-soft);font-size:11px">${d}</span><br>${b}</div></div>`).join("")}</div>`);
+  }
+  else if(kind==="checkins"){
+    const got=BADGES.filter(b=>b.t(CHECKINS));
+    const byCat={}; CHECKINS.forEach(c=>{ byCat[c.cat]=(byCat[c.cat]||0)+1; });
+    const top=Object.entries(byCat).sort((a,b)=>b[1]-a[1])[0];
+    const avg=CHECKINS.length?(CHECKINS.reduce((s,c)=>s+c.rate,0)/CHECKINS.length).toFixed(1):"–";
+    mysheet(`<div class="msheet-h"><h2>내 술 기록</h2><p>마신 술이 쌓여 나만의 기록이 돼요</p></div>
+      <div class="stats-row" style="margin-left:20px;margin-right:20px">
+        <div class="stat-box"><b>${CHECKINS.length}</b><span>총 체크인</span></div>
+        <div class="stat-box"><b>${avg}</b><span>내 평균 ★</span></div>
+        <div class="stat-box"><b>${top?top[0]:'–'}</b><span>최다 주종</span></div>
+      </div>
+      <div class="sec-h" style="padding-top:18px"><h2 style="font-size:15px">뱃지</h2><span class="more">${got.length}/${BADGES.length}</span></div>
+      <div class="badges">${BADGES.map(b=>{const has=b.t(CHECKINS);
+        return `<div class="bdg ${has?'':'locked'}"><span class="be">${has?b.e:'🔒'}</span><div class="bn">${b.n}</div><div class="bd">${b.d}</div></div>`;}).join("")}</div>
+      <div class="sec-h"><h2 style="font-size:15px">최근 기록</h2></div>
+      <div class="block" style="margin-bottom:26px">${CHECKINS.length?CHECKINS.slice(0,20).map(c=>{
+        const d=DATA.find(x=>x.name===c.drink);
+        return `<div class="ci-row"><div class="cim">${c.photo?`<img src="${c.photo}" alt="">`:d&&d.photo?`<img src="${d.photo}" alt="">`:'🍷'}</div>
+          <div class="cit"><b>${c.drink}</b><span>${c.mood?c.mood+" · ":""}${new Date(c.at).toLocaleDateString("ko-KR")}${c.text?" · "+c.text.slice(0,18):""}</span></div>
+          <div class="cis">${"★".repeat(c.rate)}</div></div>`;}).join("")
+        :`<div class="empty" style="padding:26px">아직 기록이 없어요.<br>술 상세에서 <b style="color:var(--accent)">🍻 마셨어요</b>를 눌러보세요</div>`}</div>`);
   }
   else if(kind==="activity"){
     const mine=COMM.filter(x=>me&&x.who===me.nick);
@@ -1753,6 +1986,7 @@ function drawRadar(vals){
 /* ============ SHEET ============ */
 function openSheet(d){
   const on=state.saved.has(d.id);
+  const myCi=(typeof CHECKINS!=="undefined"?CHECKINS:[]).filter(c=>c.drink===d.name).length;
   const bar=(l,v,col)=>`<div class="bar-row"><span class="lbl">${l}</span><div class="track"><div class="fill" style="width:${v*20}%${col?';background:'+col:''}"></div></div><span class="val">${v}/5</span></div>`;
   const sim=DATA.filter(x=>x.cat===d.cat&&x.id!==d.id).slice(0,4);
   $("#sheet").innerHTML=`
@@ -1784,7 +2018,8 @@ function openSheet(d){
     ${sim.length?`<div class="block"><h4>비슷한 ${d.cat}</h4><div class="sim">${sim.map(s=>`<button class="simcard" data-open="${s.id}"><div class="simb">${bimg(s)}</div><div class="n">${s.name}</div><div class="r">★ ${s.rating.toFixed(1)}</div></button>`).join("")}</div></div>`:''}
     <div class="d-actions">
       <button class="btn-save ${on?'on':''}" data-save="${d.id}">${on?'♥':'♡'}</button>
-      <button class="btn-primary" data-save-close="${d.id}">${on?'술장에 담김 ✓':'내 술장에 담기'}</button>
+      <button class="btn-checkin ${myCi?'done':''}" data-checkin="${d.id}">🍻 ${myCi?`마셨어요 ${myCi}회`:'마셨어요'}</button>
+      <button class="btn-primary" data-save-close="${d.id}">${on?'담김 ✓':'술장에'}</button>
     </div>`;
   $("#scrim").classList.add("open"); $("#sheet").classList.add("open"); $("#sheet").scrollTop=0;
 }
@@ -1798,9 +2033,9 @@ function toggleSave(id, silent){ id=+id;
 
 /* ============ DISPATCH ============ */
 function renderTab(){
-  ["home","rank","match","my","cure","world","comm"].forEach(t=>$("#s-"+t).classList.toggle("on",state.tab===t));
+  ["home","rank","match","my","cure","world","comm","near"].forEach(t=>{ const el=$("#s-"+t); if(el) el.classList.toggle("on",state.tab===t); });
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===state.tab));
-  if(state.tab==="home") renderHome(); else if(state.tab==="rank") renderRank(); else if(state.tab==="match") renderMatch(); else if(state.tab==="my") renderMy(); else if(state.tab==="cure") renderCure(); else if(state.tab==="comm") renderComm(); else renderWorld();
+  if(state.tab==="home") renderHome(); else if(state.tab==="rank") renderRank(); else if(state.tab==="match") renderMatch(); else if(state.tab==="my") renderMy(); else if(state.tab==="cure") renderCure(); else if(state.tab==="comm") renderComm(); else if(state.tab==="near") renderNear(); else renderWorld();
 }
 
 /* ============ EVENTS ============ */

@@ -1142,13 +1142,6 @@ function renderHome(){
       </div>
       <div class="reco-go">${state.profile?'재진단':'시작'} →</div>
     </button>
-    <div class="sec-h"><h2>근처 모임</h2><span class="more" data-meetnew>+ 모임 만들기</span></div>
-    <div class="mchips">${MKINDS.map(([n,k])=>`<button class="chip ${meetFilter===n?'on':''}" data-meetf="${n}">${n}</button>`).join("")}</div>
-    <div class="meets">
-      ${(meetFilter==="전체"?MEETS:MEETS.filter(m=>m.kind===(MKINDS.find(k=>k[0]===meetFilter)||[])[1])).slice(0,10).map(meetCard).join("")
-        ||`<div class="empty" style="padding:20px 4px;font-size:12.5px">이 종류의 모임이 아직 없어요</div>`}
-      <button class="mnew" data-meetnew><span>+</span>모임 만들기</button>
-    </div>
     <div class="sec-h"><h2>지금 수다방</h2><span class="more" data-goto="comm">전체 →</span></div>
     ${COMM.slice().sort((a,b)=>b.likes-a.likes).slice(0,3).map(p=>`<button class="mini-post" data-goto="comm">
       <div class="pav">${p.who[0]}</div><span class="mtxt"><b style="color:var(--ink)">${esc(p.who)}</b> · ${esc(p.text.split("\n")[0])}</span><span class="mlk">♥ ${p.likes}</span>
@@ -1604,7 +1597,7 @@ function openMeetCreate(){
 let nmKind="flash";
 document.addEventListener("click",e=>{
   const t=e.target;
-  const mf=t.closest("[data-meetf]"); if(mf){ meetFilter=mf.dataset.meetf; renderHome(); return; }
+  const mf=t.closest("[data-meetf]"); if(mf){ meetFilter=mf.dataset.meetf; renderNear(); return; }
   const mo=t.closest("[data-meetopen]"); if(mo){ const m=MEETS.find(x=>x.id==mo.dataset.meetopen); if(m) openMeet(m); return; }
   const mn=t.closest("[data-meetnew]"); if(mn){ if(!requireLogin("모임을 만들려면 로그인이 필요해요")) return; openMeetCreate(); return; }
   const nk=t.closest("[data-nmkind]");
@@ -1615,7 +1608,7 @@ document.addEventListener("click",e=>{
     if(MYMEETS.has(m.id)){ MYMEETS.delete(m.id); m.joined=Math.max(0,m.joined-1); toast("참여를 취소했어요"); }
     else if(m.joined>=m.cap){ toast("자리가 다 찼어요"); return; }
     else { MYMEETS.add(m.id); m.joined++; toast("참여 신청 완료! 모임장 확인 후 확정돼요 🍻"); }
-    saveMeets(); saveMyMeets(); openMeet(m); renderHome(); return; }
+    saveMeets(); saveMyMeets(); openMeet(m); if(state.tab==="near") renderNear(); return; }
   const ms=t.closest("[data-meetshare]");
   if(ms){ const m=MEETS.find(x=>x.id==ms.dataset.meetshare); if(!m) return;
     const txt=`[홍술 모임] ${m.title}\n${m.when} · ${m.place}\n${location.href}`;
@@ -1635,12 +1628,13 @@ document.addEventListener("click",e=>{
     const m={id:Date.now(),kind:nmKind,title,host:me.nick,hav:me.av,place,area:"내가 만든 모임",
       when,cap,joined:1,fee:g("nm-fee")||"각자 부담",dist:0,desc:g("nm-desc")||"함께 마셔요!",tags:["새모임"]};
     MEETS.unshift(m); MYMEETS.add(m.id); saveMeets(); saveMyMeets();
-    closeSheet(); state.tab="home"; renderTab(); toast("모임이 등록됐어요! 🍻"); return; }
+    closeSheet(); nearView="meet"; meetFilter="전체"; state.tab="near"; renderTab(); toast("모임이 등록됐어요! 🍻"); return; }
 });
 
 /* ============ 근처 술집 (실시간 위치 + OpenStreetMap) ============ */
 const near={loading:false,error:null,items:[],pos:null,filter:"전체",placeName:null};
 const SPOTS=[["강남",37.4979,127.0276],["홍대",37.5563,126.9236],["이태원",37.5345,126.9946],["종로",37.5704,126.9921],["건대",37.5403,127.0700],["서면",35.1579,129.0594],["부산 해운대",35.1587,129.1604]];
+let nearView="meet";
 const NEAR_FILTERS=[["전체",""],["술집·바","bar"],["펍","pub"],["주류판매점","alcohol"],["식당","restaurant"]];
 const KIND_KO={bar:"술집·바",pub:"펍",alcohol:"주류판매점",restaurant:"식당",nightclub:"클럽",biergarten:"비어가든",wine:"와인샵"};
 function kmDist(a,b,c,d){ const R=6371,r=Math.PI/180;
@@ -1724,8 +1718,31 @@ function renderNear(){
   const cities=`<div class="mhint" style="text-align:center;margin:14px 0 8px">또는 지역으로 둘러보기</div>
     <div class="tabs" style="justify-content:center;flex-wrap:wrap;padding-top:0">
       ${SPOTS.map(s=>`<button class="chip" data-nearspot="${s[0]}">${s[0]}</button>`).join("")}</div>`;
+  const meetList=(meetFilter==="전체"?MEETS:MEETS.filter(m=>m.kind===(MKINDS.find(k=>k[0]===meetFilter)||[])[1]));
+  const meetSection=`
+    <div class="sec-h" style="padding-top:18px"><h2>근처 모임</h2><span class="more" data-meetnew>+ 모임 만들기</span></div>
+    <div class="mchips">${MKINDS.map(([n])=>`<button class="chip ${meetFilter===n?'on':''}" data-meetf="${n}">${n}</button>`).join("")}</div>
+    <div class="meets">
+      ${meetList.slice(0,12).map(meetCard).join("")||`<div class="empty" style="padding:20px 4px;font-size:12.5px">이 종류의 모임이 아직 없어요</div>`}
+      <button class="mnew" data-meetnew><span>+</span>모임 만들기</button>
+    </div>`;
+  if(nearView==="meet"){
+    el.innerHTML=`
+      <div class="match-hd"><h2>근처</h2><p>같이 마실 사람과 갈 곳을 찾아보세요</p></div>
+      <div class="mchips" style="padding-bottom:2px">
+        <button class="chip on" data-nearview="meet">🍻 모임</button>
+        <button class="chip" data-nearview="bar">📍 술집</button>
+      </div>
+      ${meetSection}
+      <div class="foot"><div class="fwarn">모임은 만 19세 이상만 참여할 수 있어요. 음주 후 운전은 절대 금지입니다.</div></div>`;
+    return;
+  }
   el.innerHTML=`
-    <div class="match-hd"><h2>근처 술집</h2><p>${near.pos?`${near.placeName||"내 위치"} 기준 1.5km · ${near.items.length}곳`:"내 주변의 술집·바·주류샵을 찾아드려요"}</p></div>
+    <div class="match-hd"><h2>근처</h2><p>${near.pos?`${esc(near.placeName||"내 위치")} 기준 1.5km · ${near.items.length}곳`:"내 주변의 술집·바·주류샵을 찾아드려요"}</p></div>
+    <div class="mchips" style="padding-bottom:2px">
+      <button class="chip" data-nearview="meet">🍻 모임</button>
+      <button class="chip on" data-nearview="bar">📍 술집</button>
+    </div>
     <div class="tabs">${NEAR_FILTERS.map(([n])=>`<button class="chip ${near.filter===n?'on':''}" data-nearf="${n}">${n}</button>`).join("")}</div>
     ${!near.pos&&!near.loading&&!near.error?`<div style="padding:16px 20px 0"><button class="auth-btn" data-nearload>📍 내 위치로 찾기</button>
       <div class="mhint" style="text-align:center;margin-top:10px">위치 정보는 검색에만 쓰이고 저장되지 않아요</div></div>${cities}`:''}
@@ -1744,6 +1761,7 @@ function renderNear(){
 }
 document.addEventListener("click",e=>{
   const nl=e.target.closest("[data-nearload]"); if(nl){ loadNear(); return; }
+  const nv=e.target.closest("[data-nearview]"); if(nv){ nearView=nv.dataset.nearview; renderNear(); window.scrollTo(0,0); return; }
   const nf=e.target.closest("[data-nearf]"); if(nf){ near.filter=nf.dataset.nearf; renderNear(); return; }
   const ns=e.target.closest("[data-nearspot]");
   if(ns){ const s=SPOTS.find(x=>x[0]===ns.dataset.nearspot); if(s) loadNear({name:s[0],lat:s[1],lon:s[2]}); return; }

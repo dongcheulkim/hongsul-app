@@ -1132,8 +1132,6 @@ function renderHome(){
       </div>
       <span class="banner-count" id="bannerCount">1 / 3</span>
     </div>
-    <div class="sec-h" style="padding-top:20px"><h2>카테고리</h2></div>
-    <div class="rail">${CATS.slice(1).map(([n,e])=>`<button class="catcard" data-cat="${n}"><div class="ic"><span class="icp"${CAT_PHOTO[n]?` style="background-image:url('${CAT_PHOTO[n]}')"`:''}>${CAT_PHOTO[n]?'':`<span class="mono serif">${n[0]}</span>`}</span></div><div class="nm">${n}</div></button>`).join("")}</div>
     <button class="reco-card" data-retest>
       <div class="reco-txt">
         <div class="eyebrow">${state.profile?'MY TASTE · '+state.profile.name:'술 추천받기'}</div>
@@ -1263,6 +1261,12 @@ function renderMy(){
       <div class="stat-box"><b>${state.saved.size?(saved.reduce((s,d)=>s+d.rating,0)/saved.length).toFixed(1):'–'}</b><span>찜 평균 ★</span></div>
       <div class="stat-box"><b>${new Set(saved.map(d=>d.cat)).size}</b><span>탐색 종류</span></div>
     </div>
+
+    <div class="sec-h" style="padding-top:20px"><h2>카테고리</h2><span class="more" data-goto="rank">전체 ${DATA.length}종 →</span></div>
+    <div class="rail">${CATS.slice(1).map(([n])=>`<button class="catcard" data-cat="${n}"><div class="ic"><span class="icp"${CAT_PHOTO[n]?` style="background-image:url('${CAT_PHOTO[n]}')"`:''}>${CAT_PHOTO[n]?'':`<span class="mono serif">${esc(n[0])}</span>`}</span></div><div class="nm">${esc(n)}</div></button>`).join("")}</div>
+
+    <div class="sec-h"><h2>큐레이션</h2></div>
+    <div class="colls">${COLLECTIONS.map((c,i)=>`<button class="coll" style="background:${c.grad}" data-coll="${i}"><span class="emo">${c.emo}</span><span class="k">${c.k}</span><span class="t">${esc(c.t)}</span></button>`).join("")}</div>
 
     <div class="menu">
       <div class="mtitle">술 둘러보기</div>

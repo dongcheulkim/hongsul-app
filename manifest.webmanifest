@@ -1,0 +1,17 @@
+{
+  "name": "홍술 — 술을 해석하다",
+  "short_name": "홍술",
+  "description": "성분·숙취·취향으로 해석하는 술 큐레이션과 술 커뮤니티",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0E0B0D",
+  "theme_color": "#0E0B0D",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

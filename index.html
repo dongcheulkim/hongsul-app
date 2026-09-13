@@ -1969,7 +1969,7 @@ const supportMenu=()=>`<div class="menu"><div class="mtitle">고객지원</div>
     <div class="menu"><div class="mtitle">약관 및 정보</div>
       ${row("doc","이용약관","",'data-openmy="terms"')}
       ${row("shield","개인정보처리방침","",'data-openmy="privacy"')}
-      ${row("ver","버전 정보","v2.0.0",'data-openmy="version"')}</div>`;
+      ${row("ver","버전 정보","v2.1.0",'data-openmy="version"')}</div>`;
 function renderMy(){
   const saved=DATA.filter(d=>state.saved.has(d.id)); const p=state.profile;
   const savedList=`<div class="sec-h"><h2>내 술장</h2><span class="more">찜 ${saved.length}</span></div>
@@ -2180,7 +2180,7 @@ function openMy(kind){
   else if(kind==="version"){
     showSheet(`<div class="msheet-h"><h2>버전 정보</h2></div>
       <div class="block" style="margin-bottom:26px"><p class="desc">
-        <b>홍술 (HONGSUL)</b> v2.0.0<br>빌드 2026.09.13<br><br>
+        <b>홍술 (HONGSUL)</b> v2.1.0<br>빌드 2026.09.14<br><br>
         수록 술 ${DATA.length}종 · ${CATS.length-1}개 카테고리<br>근처 술집: OpenStreetMap 연동<br><br>
         © 2026 (주)홍술컴퍼니. All rights reserved.</p></div>`);
   }

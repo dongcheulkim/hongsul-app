@@ -1,57 +1,311 @@
 # 제품 이미지 출처 (img/*.jpg)
 
-모든 이미지는 600×720 타일(배경 #F3EEF0)로 정규화됨. 상업 서비스로 출시하기 전에는 제조사 이미지 사용 허락 또는 자체 촬영본으로 교체 권장.
-Wikimedia Commons 이미지는 각 파일 페이지의 라이선스(CC BY / CC BY-SA 등)를 따르며, Open Food Facts 이미지는 CC BY-SA 3.0.
+수록 술 300종. 모든 이미지는 600×720 타일(배경 #F3EEF0)로 정규화되고, 가장자리에 연결된 단색 배경만 제거됩니다.
+상업 서비스로 출시하기 전에는 제조사 이미지 사용 허락 또는 자체 촬영본으로 교체를 권장합니다.
+Wikimedia Commons 이미지는 각 파일 페이지의 라이선스(CC BY / CC BY-SA 등)를 따르고, Open Food Facts 이미지는 CC BY-SA 3.0, Wikipedia 대표 이미지는 해당 파일의 라이선스를 따릅니다.
+유통사(11번가·컬리·라쿠텐·Vivino) 상품 이미지는 참고용으로만 수집했습니다.
+
+출처별 수: Wikimedia Commons 106 · 제조사 공식 사이트/Vivino 86 · 사진 없음 35 · 제조사 공식 사이트 29 · 유통사 상품 이미지(11번가·컬리·라쿠텐) 14 · 하이트진로 공식 사이트 10 · Wikipedia 대표 이미지 8 · Open Food Facts 7 · Vivino 2 · 검색(리테일) 2 · 수동 크롭/편집본 1
 
 | id | 제품 | 출처 |
 |---|---|---|
-| 1 | 참이슬 후레쉬 | 하이트진로 공식 (m.hitejinro.com 브랜드 페이지) |
-| 2 | 테라 | 하이트진로 공식 (m.hitejinro.com 브랜드 페이지) |
-| 3 | 글렌피딕 12년 | Wikimedia Commons — File:GlenfiddichSpecialReserve12Years.jpg |
-| 4 | 1865 카베르네 | Vivino 병 이미지 |
-| 5 | 화요 25 | 화요 공식 (hwayo.com) |
-| 6 | 짐빔 하이볼 | 이마트에브리데이 상품 이미지 |
-| 7 | 처음처럼 | 롯데칠성음료 공식 (company.lottechilsung.co.kr) |
-| 8 | 안동소주 45 | 민속주 안동소주 공식 (andongsoju.com) |
-| 9 | 산토리 가쿠빈 | Wikimedia Commons — File:SW_4963.jpg (크롭) |
-| 10 | 클라우드 | 롯데칠성음료 공식 |
-| 11 | 제주 위트 에일 | 제주맥주 공식 (jejubeer.co.kr) |
-| 12 | 막걸리 생 | Wikimedia Commons — File:Makgeolli bottle.jpg |
-| 13 | 앱솔루트 보드카 | Wikimedia Commons — File:Absolut vodka bottle.png |
+| 1 | 참이슬 후레쉬 | 하이트진로 공식 사이트 |
+| 2 | 테라 | 하이트진로 공식 사이트 |
+| 3 | 글렌피딕 12년 | Wikimedia Commons |
+| 4 | 1865 카베르네 | Vivino |
+| 5 | 화요 25 | 검색(리테일) |
+| 6 | 짐빔 하이볼 | 제조사 공식 사이트 |
+| 7 | 처음처럼 | 제조사 공식 사이트 |
+| 8 | 안동소주 45 | 제조사 공식 사이트 |
+| 9 | 산토리 가쿠빈 | 수동 크롭/편집본 |
+| 10 | 클라우드 클리어 | 제조사 공식 사이트 |
+| 11 | 제주 위트 에일 | 제조사 공식 사이트 |
+| 12 | 막걸리 생 | Wikimedia Commons |
+| 13 | 앱솔루트 보드카 | Wikimedia Commons |
 | 14 | 그레이 구스 | Open Food Facts |
-| 15 | 봄베이 사파이어 | Bombay Sapphire 공식 (bombaysapphire.com) |
-| 16 | 헨드릭스 | Wikimedia Commons — File:Hendrick's Gin - Bottle.png |
-| 17 | 바카디 화이트 | Bacardí 공식 (bacardi.com) |
-| 18 | 캡틴 모건 스파이스드 | Wikimedia Commons — File:Captain Morgan Rum - Bottle.png |
+| 15 | 봄베이 사파이어 | 제조사 공식 사이트 |
+| 16 | 헨드릭스 | Wikimedia Commons |
+| 17 | 바카디 화이트 | 제조사 공식 사이트 |
+| 18 | 캡틴 모건 스파이스드 | Wikimedia Commons |
 | 19 | 호세 쿠엘보 | Open Food Facts |
-| 20 | 패트론 실버 | Patrón 공식 (patrontequila.com) |
-| 21 | 헤네시 VS | Wikimedia Commons — File:2023 Hennessy V.S. Cognac.jpg |
-| 22 | 레미 마르탱 VSOP | Wikimedia Commons — File:Rémy Martin VSOP.jpg |
-| 23 | 마오타이 | Wikimedia Commons — File:Moutai.jpg |
-| 24 | 우량예 | From The Malt 상품 이미지 |
-| 25 | 닷사이 45 | Dassai 공식 (dassai.com) |
-| 26 | 하쿠츠루 준마이 | 하쿠츠루 공식 (hakutsuru-sake.com) |
-| 27 | 예거마이스터 | Wikimedia Commons — File:Jagermeister bottle.jpg |
-| 28 | 캄파리 | Wikimedia Commons — File:Bottle of Campari (United States).jpg |
-| 29 | 말리부 코코넛 | Malibu 공식 (maliburumdrinks.com) |
-| 30 | 화이트 클로 | White Claw 공식 (whiteclaw.com) |
-| 31 | 서머스비 | Somersby 공식 (somersby.com) |
-| 32 | 조니워커 블랙 | Diageo thebar.com |
-| 33 | 잭 다니엘스 | Wikimedia Commons — File:Jack Daniel's Old No. 7 1,14l.jpg |
+| 20 | 패트론 실버 | 제조사 공식 사이트 |
+| 21 | 헤네시 VS | Wikimedia Commons |
+| 22 | 레미 마르탱 VSOP | Wikimedia Commons |
+| 23 | 마오타이 | Wikimedia Commons |
+| 24 | 우량예 | 제조사 공식 사이트 |
+| 25 | 닷사이 45 | 제조사 공식 사이트 |
+| 26 | 하쿠츠루 준마이 | 제조사 공식 사이트 |
+| 27 | 예거마이스터 | Wikimedia Commons |
+| 28 | 캄파리 | Wikimedia Commons |
+| 29 | 말리부 코코넛 | 제조사 공식 사이트 |
+| 30 | 화이트 클로 | 제조사 공식 사이트 |
+| 31 | 서머스비 | 제조사 공식 사이트 |
+| 32 | 조니워커 블랙 | 제조사 공식 사이트 |
+| 33 | 잭 다니엘스 | Wikimedia Commons |
 | 34 | 기네스 드래프트 | Open Food Facts |
-| 35 | 아사히 슈퍼드라이 | Wikimedia Commons — File:AsahiSuperDry2018.jpg |
-| 36 | 모엣 샹동 브뤼 | Moët & Chandon 공식 (moet.com) |
-| 37 | 몬테스 알파 카베르네 | Montes 공식 (monteswines.com) |
-| 38 | 킴 크로포드 소비뇽블랑 | Kim Crawford 공식 (kimcrawfordwines.com) |
-| 39 | 옐로우테일 쉬라즈 | Yellow Tail 공식 (yellowtailwine.com) |
-| 40 | 디아블로 다크레드 | Wikimedia Commons — File:Casillero del Diablo in Ankara.jpg |
-| 41 | 무통 카데 루즈 | Mouton Cadet 공식 (moutoncadet.com) |
-| 42 | 빌라엠 모스카토 | Villa M 공식 (villamwines.com) |
-| 43 | 미오네토 프로세코 | Mionetto 공식 (mionetto.com) |
-| 44 | 베린저 화이트진판델 | Vivino 병 이미지 |
-| 45 | 발렌타인 17년 | Ballantine's 공식 (ballantines.com) |
-| 46 | 시바스 리갈 12년 | Chivas 공식 (chivas.com) |
-| 47 | 맥캘란 12년 셰리오크 | The Macallan 공식 (themacallan.com) |
-| 48 | 아드벡 10년 | Wikimedia Commons — File:Ardbeg Ten mini bottle |
-| 49 | 와일드터키 101 | Wild Turkey 공식 (wildturkeybourbon.com) |
-| 50 | 버팔로 트레이스 | Buffalo Trace 공식 (buffalotracedistillery.com) |
+| 35 | 아사히 슈퍼드라이 | Wikimedia Commons |
+| 36 | 모엣 샹동 브뤼 | 제조사 공식 사이트 |
+| 37 | 몬테스 알파 카베르네 | 제조사 공식 사이트 |
+| 38 | 킴 크로포드 소비뇽블랑 | 제조사 공식 사이트 |
+| 39 | 옐로우테일 쉬라즈 | 제조사 공식 사이트 |
+| 40 | 디아블로 다크레드 | Wikimedia Commons |
+| 41 | 무통 카데 루즈 | 제조사 공식 사이트 |
+| 42 | 빌라엠 모스카토 | 제조사 공식 사이트 |
+| 43 | 미오네토 프로세코 | 제조사 공식 사이트 |
+| 44 | 베린저 화이트진판델 | Vivino |
+| 45 | 발렌타인 17년 | 제조사 공식 사이트 |
+| 46 | 시바스 리갈 12년 | 제조사 공식 사이트 |
+| 47 | 맥캘란 12년 셰리오크 | 제조사 공식 사이트 |
+| 48 | 아드벡 10년 | Wikimedia Commons |
+| 49 | 와일드터키 101 | 제조사 공식 사이트 |
+| 50 | 버팔로 트레이스 | 제조사 공식 사이트 |
+| 51 | 진로이즈백 | 하이트진로 공식 사이트 |
+| 52 | 새로 | 제조사 공식 사이트 |
+| 53 | 좋은데이 | Open Food Facts |
+| 54 | 대선 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 55 | 한라산 | Wikimedia Commons |
+| 56 | 잎새주 | 사진 없음 (이니셜 표시) |
+| 57 | 참이슬 오리지널 | 하이트진로 공식 사이트 |
+| 58 | 카스 프레시 | Wikimedia Commons |
+| 59 | 켈리 | 하이트진로 공식 사이트 |
+| 60 | 한맥 | 사진 없음 (이니셜 표시) |
+| 61 | 칭따오 | Wikimedia Commons |
+| 62 | 하이네켄 | Wikimedia Commons |
+| 63 | 코로나 엑스트라 | Wikimedia Commons |
+| 64 | 삿포로 프리미엄 | 제조사 공식 사이트/Vivino |
+| 65 | 기린 이치방 | Wikimedia Commons |
+| 66 | 스텔라 아르투아 | Wikimedia Commons |
+| 67 | 호가든 | Wikimedia Commons |
+| 68 | 파울라너 헤페바이스 | 제조사 공식 사이트/Vivino |
+| 69 | 필스너 우르켈 | Wikimedia Commons |
+| 70 | 블루문 | Wikimedia Commons |
+| 71 | 곰표 밀맥주 | 사진 없음 (이니셜 표시) |
+| 72 | 산토리 프리미엄 몰츠 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 73 | 글렌리벳 12년 | Wikimedia Commons |
+| 74 | 글렌모렌지 오리지널 10년 | 제조사 공식 사이트/Vivino |
+| 75 | 라프로익 10년 | Wikimedia Commons |
+| 76 | 라가불린 16년 | Wikimedia Commons |
+| 77 | 탈리스커 10년 | Wikimedia Commons |
+| 78 | 보모어 12년 | Wikimedia Commons |
+| 79 | 발베니 12년 더블우드 | Wikimedia Commons |
+| 80 | 글렌드로낙 12년 | 제조사 공식 사이트/Vivino |
+| 81 | 조니워커 블루라벨 | Wikimedia Commons |
+| 82 | 조니워커 레드라벨 | Wikimedia Commons |
+| 83 | 야마자키 12년 | Wikimedia Commons |
+| 84 | 히비키 하모니 | Wikimedia Commons |
+| 85 | 메이커스 마크 | Wikimedia Commons |
+| 86 | 짐빔 화이트 | Wikimedia Commons |
+| 87 | 제임슨 | Wikimedia Commons |
+| 88 | 몽키 숄더 | Wikimedia Commons |
+| 89 | 발렌타인 파이니스트 | 제조사 공식 사이트/Vivino |
+| 90 | 오반 14년 | Wikimedia Commons |
+| 91 | 산타리타 120 카베르네 | 제조사 공식 사이트/Vivino |
+| 92 | 켄달잭슨 빈트너스 리저브 샤르도네 | 제조사 공식 사이트/Vivino |
+| 93 | 클라우디 베이 소비뇽블랑 | 제조사 공식 사이트/Vivino |
+| 94 | 로버트 몬다비 프라이빗 셀렉션 카베르네 | 제조사 공식 사이트/Vivino |
+| 95 | 마르케스 데 카세레스 크리안자 | 제조사 공식 사이트/Vivino |
+| 96 | 카를로 로시 레드 | 제조사 공식 사이트/Vivino |
+| 97 | 브라운 브라더스 모스카토 | 제조사 공식 사이트/Vivino |
+| 98 | 샤또 탈보 | Wikimedia Commons |
+| 99 | 티냐넬로 | Wikimedia Commons |
+| 100 | 마르케스 데 카사 콘차 카베르네 | 제조사 공식 사이트/Vivino |
+| 101 | 루이 자도 부르고뉴 피노누아 | 제조사 공식 사이트/Vivino |
+| 102 | 몬테스 알파 샤르도네 | 제조사 공식 사이트/Vivino |
+| 103 | 세븐 데들리 진판델 | 제조사 공식 사이트/Vivino |
+| 104 | 뵈브 클리코 옐로라벨 | 제조사 공식 사이트/Vivino |
+| 105 | 돔 페리뇽 | 제조사 공식 사이트/Vivino |
+| 106 | 프레시넷 코르돈 네그로 | 제조사 공식 사이트/Vivino |
+| 107 | 라 마르카 프로세코 | 제조사 공식 사이트/Vivino |
+| 108 | 마르티니 아스티 | 제조사 공식 사이트/Vivino |
+| 109 | 문배주 | Wikimedia Commons |
+| 110 | 이강주 | Wikimedia Commons |
+| 111 | 복순도가 손막걸리 | 사진 없음 (이니셜 표시) |
+| 112 | 느린마을 막걸리 | 제조사 공식 사이트/Vivino |
+| 113 | 서울 장수 생막걸리 | 사진 없음 (이니셜 표시) |
+| 114 | 백세주 | Wikimedia Commons |
+| 115 | 산사춘 | 제조사 공식 사이트/Vivino |
+| 116 | 진도 홍주 | 제조사 공식 사이트/Vivino |
+| 117 | 원소주 스피릿 | 제조사 공식 사이트/Vivino |
+| 118 | 토끼소주 | Wikimedia Commons |
+| 119 | 산토리 가쿠하이볼 캔 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 120 | 어프어프 하이볼 레몬토닉 | 사진 없음 (이니셜 표시) |
+| 121 | 짐빔 하이볼 자몽 | 사진 없음 (이니셜 표시) |
+| 122 | 스미노프 레드 | 제조사 공식 사이트/Vivino |
+| 123 | 벨루가 노블 | Wikimedia Commons |
+| 124 | 시락 | Open Food Facts |
+| 125 | 탱커레이 | 제조사 공식 사이트/Vivino |
+| 126 | 고든스 | Wikimedia Commons |
+| 127 | 몽키 47 | Wikimedia Commons |
+| 128 | 로쿠 진 | Wikimedia Commons |
+| 129 | 하바나 클럽 3년 | Wikimedia Commons |
+| 130 | 자카파 23 | 제조사 공식 사이트/Vivino |
+| 131 | 디플로마티코 리제르바 | 제조사 공식 사이트/Vivino |
+| 132 | 돈 훌리오 레포사도 | Wikimedia Commons |
+| 133 | 1800 실버 | 제조사 공식 사이트/Vivino |
+| 134 | 올메카 알토스 플라타 | Open Food Facts |
+| 135 | 마르텔 VSOP | 제조사 공식 사이트/Vivino |
+| 136 | 까뮤 VS | Wikimedia Commons |
+| 137 | 연태고량주 | 사진 없음 (이니셜 표시) |
+| 138 | 공부가주 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 139 | 이과두주 | Wikimedia Commons |
+| 140 | 쿠보타 센주 | 제조사 공식 사이트/Vivino |
+| 141 | 겟케이칸 준마이 | 제조사 공식 사이트/Vivino |
+| 142 | 주욘다이 혼마루 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 143 | 덴구마이 야마하이 준마이 | 제조사 공식 사이트/Vivino |
+| 144 | 베일리스 | Wikimedia Commons |
+| 145 | 깔루아 | 제조사 공식 사이트/Vivino |
+| 146 | 아페롤 | Wikimedia Commons |
+| 147 | 코인트로 | Wikimedia Commons |
+| 148 | 디사론노 | 제조사 공식 사이트/Vivino |
+| 149 | 애플 폭스 사이더 | 사진 없음 (이니셜 표시) |
+| 150 | 스트롱보우 골드애플 | Wikimedia Commons |
+| 151 | 자몽에이슬 | 제조사 공식 사이트/Vivino |
+| 152 | 청포도에이슬 | 하이트진로 공식 사이트 |
+| 153 | 순하리 처음처럼 유자 | 사진 없음 (이니셜 표시) |
+| 154 | 좋은데이 컬러시리즈 블루 | Wikipedia 대표 이미지 |
+| 155 | 진로 골드 | 하이트진로 공식 사이트 |
+| 156 | 대장부 21 | 사진 없음 (이니셜 표시) |
+| 157 | 일품진로 | 제조사 공식 사이트/Vivino |
+| 158 | 화요 41 | 검색(리테일) |
+| 159 | 화요 17 | 사진 없음 (이니셜 표시) |
+| 160 | 안동소주 22 박재서 | Wikimedia Commons |
+| 161 | 하이트 엑스트라콜드 | 하이트진로 공식 사이트 |
+| 162 | 버드와이저 | 제조사 공식 사이트/Vivino |
+| 163 | 밀러 제뉴인 드래프트 | 하이트진로 공식 사이트 |
+| 164 | 크로넨버그 1664 블랑 | Wikipedia 대표 이미지 |
+| 165 | 에델바이스 | Wikimedia Commons |
+| 166 | 코젤 다크 | Wikimedia Commons |
+| 167 | 칼스버그 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 168 | 타이거 | Wikimedia Commons |
+| 169 | 싱하 | Wikimedia Commons |
+| 170 | 산미구엘 | Wikimedia Commons |
+| 171 | 사이공 스페셜 | Wikimedia Commons |
+| 172 | 바이엔슈테판 헤페바이스 | Wikimedia Commons |
+| 173 | 에딩거 바이스비어 | Wikimedia Commons |
+| 174 | 레페 브라운 | Wikimedia Commons |
+| 175 | 듀벨 | Wikimedia Commons |
+| 176 | 시메이 블루 | Wikimedia Commons |
+| 177 | 구스 아일랜드 IPA | 사진 없음 (이니셜 표시) |
+| 178 | 브루독 펑크 IPA | 제조사 공식 사이트/Vivino |
+| 179 | 제주 펠롱 에일 | 사진 없음 (이니셜 표시) |
+| 180 | 필라이트 | 하이트진로 공식 사이트 |
+| 181 | 아벨라워 12년 더블캐스크 | 사진 없음 (이니셜 표시) |
+| 182 | 글렌파클라스 105 | Wikimedia Commons |
+| 183 | 달모어 12년 | Wikimedia Commons |
+| 184 | 아란 10년 | Wikimedia Commons |
+| 185 | 스프링뱅크 10년 | Wikimedia Commons |
+| 186 | 아드벡 우가달 | Wikimedia Commons |
+| 187 | 라프로익 쿼터캐스크 | Wikimedia Commons |
+| 188 | 카발란 클래식 | Wikimedia Commons |
+| 189 | 하쿠슈 12년 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 190 | 산토리 토키 | 사진 없음 (이니셜 표시) |
+| 191 | 니카 프롬 더 배럴 | Wikimedia Commons |
+| 192 | 니카 코페이 그레인 | Wikimedia Commons |
+| 193 | 레드브레스트 12년 | Wikimedia Commons |
+| 194 | 부시밀즈 오리지널 | Wikimedia Commons |
+| 195 | 우드포드 리저브 | 제조사 공식 사이트/Vivino |
+| 196 | 불렛 버번 | Wikimedia Commons |
+| 197 | 엘라이자 크레이그 스몰배치 | Wikimedia Commons |
+| 198 | 포 로지스 스몰배치 | 제조사 공식 사이트/Vivino |
+| 199 | 젠틀맨 잭 | Wikimedia Commons |
+| 200 | 크라운 로얄 | Wikimedia Commons |
+| 201 | 로얄 살루트 21년 | Wikimedia Commons |
+| 202 | 시바스 리갈 18년 | 사진 없음 (이니셜 표시) |
+| 203 | 조니워커 골드 리저브 | Wikimedia Commons |
+| 204 | 골든블루 사피루스 | 사진 없음 (이니셜 표시) |
+| 205 | 윈저 12년 | 사진 없음 (이니셜 표시) |
+| 206 | 임페리얼 12년 | 사진 없음 (이니셜 표시) |
+| 207 | 카르멘 리제르바 카베르네 | 제조사 공식 사이트/Vivino |
+| 208 | 프론테라 카베르네 | 제조사 공식 사이트/Vivino |
+| 209 | 옐로우테일 카베르네 | 제조사 공식 사이트/Vivino |
+| 210 | 울프 블라스 옐로라벨 카베르네 | 제조사 공식 사이트/Vivino |
+| 211 | 펜폴즈 쿠눙가 힐 쉬라즈 카베르네 | 제조사 공식 사이트/Vivino |
+| 212 | 펜폴즈 빈 407 | 제조사 공식 사이트/Vivino |
+| 213 | 19 크라임즈 레드 | 제조사 공식 사이트/Vivino |
+| 214 | 조셉 드루앵 샤블리 | 제조사 공식 사이트/Vivino |
+| 215 | 라 크레마 소노마 피노누아 | 제조사 공식 사이트/Vivino |
+| 216 | 메이오미 피노누아 | 제조사 공식 사이트/Vivino |
+| 217 | 케이머스 카베르네 | 제조사 공식 사이트/Vivino |
+| 218 | 안티노리 페폴리 키안티 클라시코 | 제조사 공식 사이트/Vivino |
+| 219 | 반피 브루넬로 디 몬탈치노 | 제조사 공식 사이트/Vivino |
+| 220 | 캄포 비에호 리오하 크리안자 | 제조사 공식 사이트/Vivino |
+| 221 | 토레스 상그레 데 토로 | 제조사 공식 사이트/Vivino |
+| 222 | 닥터 루젠 리슬링 | 제조사 공식 사이트/Vivino |
+| 223 | 그라함스 10년 토니 포트 | 제조사 공식 사이트/Vivino |
+| 224 | 마테우스 로제 | 제조사 공식 사이트/Vivino |
+| 225 | 샤또 마고 | 제조사 공식 사이트/Vivino |
+| 226 | 샤또 라피트 로칠드 | 제조사 공식 사이트/Vivino |
+| 227 | 페리에 주에 그랑 브뤼 | 제조사 공식 사이트/Vivino |
+| 228 | 로랑 페리에 라 퀴베 | 제조사 공식 사이트/Vivino |
+| 229 | 빌라엠 화이트 | 제조사 공식 사이트/Vivino |
+| 230 | 경주법주 | 사진 없음 (이니셜 표시) |
+| 231 | 한산소곡주 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 232 | 해창막걸리 12도 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 233 | 지평 생막걸리 | 사진 없음 (이니셜 표시) |
+| 234 | 금정산성 막걸리 | 사진 없음 (이니셜 표시) |
+| 235 | 나루 생막걸리 11.5 | 제조사 공식 사이트/Vivino |
+| 236 | 서울의 밤 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 237 | 고운달 백자 | 제조사 공식 사이트/Vivino |
+| 238 | 감홍로 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 239 | 죽력고 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 240 | 매실원주 | Wikipedia 대표 이미지 |
+| 241 | 보해 복분자주 | Wikipedia 대표 이미지 |
+| 242 | 오미로제 결 | 제조사 공식 사이트/Vivino |
+| 243 | 술취한원숭이 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 244 | 진로 하이볼 레몬토닉 | 사진 없음 (이니셜 표시) |
+| 245 | 어프어프 하이볼 자몽 | 사진 없음 (이니셜 표시) |
+| 246 | 짐빔 하이볼 진저 | Open Food Facts |
+| 247 | 벨베데레 | Wikimedia Commons |
+| 248 | 케텔 원 | 제조사 공식 사이트/Vivino |
+| 249 | 앱솔루트 시트론 | Wikimedia Commons |
+| 250 | 티토스 | 제조사 공식 사이트/Vivino |
+| 251 | 핀란디아 | Wikimedia Commons |
+| 252 | 비피터 | 제조사 공식 사이트/Vivino |
+| 253 | 플리머스 진 | Wikipedia 대표 이미지 |
+| 254 | 시타델 | Wikimedia Commons |
+| 255 | 노르데스 | 제조사 공식 사이트/Vivino |
+| 256 | 정원 진 | 제조사 공식 사이트/Vivino |
+| 257 | 마운트 게이 이클립스 | 제조사 공식 사이트/Vivino |
+| 258 | 애플턴 이스테이트 12년 | Wikimedia Commons |
+| 259 | 크라켄 블랙 스파이스드 | Wikimedia Commons |
+| 260 | 플랜테이션 3 스타 | Wikimedia Commons |
+| 261 | 돈 훌리오 블랑코 | Wikipedia 대표 이미지 |
+| 262 | 클라세 아술 레포사도 | 제조사 공식 사이트/Vivino |
+| 263 | 헤라두라 실버 | 제조사 공식 사이트/Vivino |
+| 264 | 카사미고스 블랑코 | Wikimedia Commons |
+| 265 | 엘 히마도르 레포사도 | Wikimedia Commons |
+| 266 | 헤네시 XO | Wikimedia Commons |
+| 267 | 마르텔 코르동 블루 | Wikimedia Commons |
+| 268 | 페르 마글루아르 VSOP 칼바도스 | 사진 없음 (이니셜 표시) |
+| 269 | 수정방 | 사진 없음 (이니셜 표시) |
+| 270 | 노주노교 특곡 | Wikimedia Commons |
+| 271 | 금문고량주 58도 | Wikimedia Commons |
+| 272 | 죽엽청주 | Wikimedia Commons |
+| 273 | 닷사이 23 | 제조사 공식 사이트 |
+| 274 | 닷사이 39 | 제조사 공식 사이트/Vivino |
+| 275 | 쿠보타 만주 | 제조사 공식 사이트/Vivino |
+| 276 | 하쿠시카 준마이 | 제조사 공식 사이트/Vivino |
+| 277 | 오제키 준마이 | Wikimedia Commons |
+| 278 | 우라카스미 준마이 | 유통사 상품 이미지(11번가·컬리·라쿠텐) |
+| 279 | 하츠마고 | 사진 없음 (이니셜 표시) |
+| 280 | 초야 우메슈 | 제조사 공식 사이트/Vivino |
+| 281 | 미도리 | Wikimedia Commons |
+| 282 | 파소아 | Wikimedia Commons |
+| 283 | 그랑 마르니에 | Wikimedia Commons |
+| 284 | 드람뷔 | Wikimedia Commons |
+| 285 | 샤르트뢰즈 그린 | 사진 없음 (이니셜 표시) |
+| 286 | 마티니 로소 | 제조사 공식 사이트/Vivino |
+| 287 | 삼부카 몰리나리 | Wikipedia 대표 이미지 |
+| 288 | 리몬첼로 팔라치 | 제조사 공식 사이트/Vivino |
+| 289 | 프란젤리코 | 제조사 공식 사이트/Vivino |
+| 290 | 호로요이 백도 | 사진 없음 (이니셜 표시) |
+| 291 | 이슬톡톡 복숭아 | 사진 없음 (이니셜 표시) |
+| 292 | 트룰리 와일드베리 | 제조사 공식 사이트/Vivino |
+| 293 | 매그너스 아이리시 사이더 | 제조사 공식 사이트/Vivino |
+| 294 | 코퍼버그 스트로베리&라임 | 사진 없음 (이니셜 표시) |
+| 295 | 하이네켄 0.0 | 사진 없음 (이니셜 표시) |
+| 296 | 카스 0.0 | 사진 없음 (이니셜 표시) |
+| 297 | 클라우드 클리어 제로 | 제조사 공식 사이트/Vivino |
+| 298 | 칭따오 논알콜릭 | 사진 없음 (이니셜 표시) |
+| 299 | 산토리 올프리 | Wikimedia Commons |
+| 300 | 아사히 드라이 제로 | Wikipedia 대표 이미지 |
